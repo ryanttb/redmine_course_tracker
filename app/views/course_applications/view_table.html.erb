@@ -22,8 +22,8 @@
 		<% @course_applications.each do |ca| %>
 		<tr>
 		  <td><%= link_to "View", course_application_path(ca) %></td>	
-		  <% @applicant_fields.each do |af| %>
-	        <td><%= ca.applicant.send(af) %></td>
+		  <% @registrant_fields.each do |af| %>
+	        <td><%= ca.registrant.send(af) %></td>
 	      <% end %>
 		  <% @custom.each do |c| %>
 		    <% ca.custom_values.each do |cv| %>
@@ -33,7 +33,7 @@
 		    <% end %>
 		  <% end %>
 		  <td><%=h ca.review_status %></td>
-		  <td><%=h ca.offer_status %></td>
+		  <td><%=h ca.acceptance_status %></td>
 		</tr>
 		<% end %>
 	  </tbody>

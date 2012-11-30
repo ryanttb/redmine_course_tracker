@@ -17,8 +17,8 @@
     <%= select_tag(:review_status, options_for_select(CourseApplication::REVIEW_STATUS)) %>
   </p>
   <p>
-    <%= label_tag(:offer_status, "Offer Status") %><br />
-    <%= select_tag(:offer_status, options_for_select(CourseApplication::ACCEPTANCE_STATUS)) %>
+    <%= label_tag(:acceptance_status, "Offer Status") %><br />
+    <%= select_tag(:acceptance_status, options_for_select(CourseApplication::ACCEPTANCE_STATUS)) %>
   </p>
   <%= submit_tag "Filter by Status" -%>
 <% end %>
@@ -40,7 +40,7 @@
 	  <%= button_to 'Zip Materials for Filtered Results Into Single Folder', zip_filtered_single_courses_path(:course_id => @course.id, :course_applications => @course_applications) %>
 	</p>
 	<p>
-	  <%= button_to 'Zip Materials for Filtered Results Into Folders by Applicant', zip_filtered_courses_path(:course_id => @course.id, :course_applications => @course_applications) %>
+	  <%= button_to 'Zip Materials for Filtered Results Into Folders by Registrant', zip_filtered_courses_path(:course_id => @course.id, :course_applications => @course_applications) %>
 	</p>
 	
 	<table class="list">
@@ -60,8 +60,8 @@
 		<tr>
 		  <td><%= link_to "View", course_application_path(ja, :course_tracker_id => @course_tracker.id) %></td>	
 		  <% @columns.each do |column| %>
-		    <% if @applicant_fields.include?(column) %>
-	          <td><%= ja.applicant.send(column) %></td>
+		    <% if @registrant_fields.include?(column) %>
+	          <td><%= ja.registrant.send(column) %></td>
 	        <% end %>
 		    <% if @custom.include?(column) %>
 			  <% ja.custom_values.each do |cv| %>
@@ -73,7 +73,7 @@
 		  <% end %>
 		  <td><%= ja.submission_status %></td>
 		  <td><%= ja.review_status %></td>
-		  <td><%= ja.offer_status %></td>
+		  <td><%= ja.acceptance_status %></td>
 		</tr>
 		<% end %>
 	  </tbody>

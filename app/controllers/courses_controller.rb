@@ -40,7 +40,7 @@ class CoursesController < ApplicationController
     sort_update 'last_name' => "#{Registrant.table_name}.last_name",
                 'id' => "#{CourseApplication.table_name}.id",
                 'review_status' => "#{CourseApplication.table_name}.review_status",
-                'offer_status' => "#{CourseApplication.table_name}.offer_status",
+                'acceptance_status' => "#{CourseApplication.table_name}.acceptance_status",
                 'created_at' => "#{CourseApplication.table_name}.created_at"
     
     @course_applications = @course.course_applications.find(:all, :order => sort_clause)
@@ -334,8 +334,8 @@ class CoursesController < ApplicationController
           if !params[:review_status].blank?
             app.review_status = params[:review_status]
           end  
-          if !params[:offer_status].blank?
-            app.offer_status = params[:offer_status]
+          if !params[:acceptance_status].blank?
+            app.acceptance_status = params[:acceptance_status]
           end 
           app.save!     
         end
@@ -829,8 +829,8 @@ class CoursesController < ApplicationController
   	unless params[:review_status].blank?
   	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :review_status => params[:review_status]})
   	end 
-  	unless params[:offer_status].blank?
-  	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :offer_status => params[:offer_status]})
+  	unless params[:acceptance_status].blank?
+  	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :acceptance_status => params[:acceptance_status]})
   	end 
   	@course_applications.flatten!
   end
@@ -853,7 +853,7 @@ class CoursesController < ApplicationController
   		  @custom << custom_field.name
   		end
   	end
-  	@columns = @registrant_fields + @custom + ['submission_status', 'review_status', 'offer_status']
+  	@columns = @registrant_fields + @custom + ['submission_status', 'review_status', 'acceptance_status']
     
     csv_string = FasterCSV.generate do |csv| 
       # header row 
@@ -874,7 +874,7 @@ class CoursesController < ApplicationController
         end
         row << ja.submission_status
         row << ja.review_status
-        row << ja.offer_status  
+        row << ja.acceptance_status  
         csv << row
       end 
     end 

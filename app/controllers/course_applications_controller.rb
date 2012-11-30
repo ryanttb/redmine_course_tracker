@@ -272,7 +272,7 @@ class CourseApplicationsController < ApplicationController
   
   def view_table
     sort_init 'review_status', 'asc'
-    sort_update %w(review_status offer_status)                
+    sort_update %w(review_status acceptance_status)                
                 
     @course = Course.find(params[:course_id])
     unless User.current.admin? || @course.is_manager?

@@ -9,7 +9,7 @@ class CourseAttachment < ActiveRecord::Base
   # validations
   validates_presence_of :filename, :name
 
-  # TODO Should I implement internal file renaming for identical filenames uploaded by different applicants?
+  # TODO Should I implement internal file renaming for identical filenames uploaded by different registrants?
   validates_uniqueness_of :filename
 
   # constants

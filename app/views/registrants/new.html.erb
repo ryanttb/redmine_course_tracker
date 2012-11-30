@@ -1,0 +1,8 @@
+<% flash[:notice] %>
+<h2><%=h @course_tracker.title %>: <em>New Registrant</em></h2>
+
+<%= render :partial => "common/tabs" %>
+<%= render :partial => "form" %>
+
+<br />
+<%= link_to 'Back', registrants_url(:course_tracker_id => @course_tracker.id) %>

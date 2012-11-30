@@ -1,0 +1,66 @@
+<p><%= link_to "Enter Referral Information", new_referral_course_applications_path(:course_application => params[:course_application_id], :course_tracker_id => @course_tracker.id) %></p>
+
+<% if @course_application_referral.nil? || @course_application_referral.empty? %>
+    No application referrals yet!
+<% else %>
+  <table class="list">
+  <thead>
+    <tr>
+      <% if(User.current.admin?)%>
+        <!-- Admin Role -->
+	    <th style="width:20%; text-align:left;">Application For</th>
+        <th style="width:10%; text-align:left;">Registrant</th>
+	    <th style="width:20%; text-align:left;">Referrer</th>
+	    <th style="width:50%; text-align:left;">File</th>
+      <% elsif (User.current.logged?)%>
+        <!-- Registrant Role -->
+	    <th style="width:20%; text-align:left;">Application For</th>
+	    <th style="width:20%; text-align:left;">Referrer</th>
+        <th style="width:30%; text-align:left;">Date Received</th>
+		<th style="width:30%; text-align:left;"></th>
+      <% else %>
+        <!-- Anonymous Role -->
+        <!-- No view for Anonymous -->
+      <% end %> 
+    </tr>
+  </thead>
+  <tbody>	  
+  	  <% @course_application_referral.each do |car| %>
+        <tr>
+        <% if(User.current.admin?)%>
+          <!-- Admin Role -->
+		  <% unless car.nil? %>
+		    <td style="width:20%"><%= link_to "#{Course.find(CourseApplication.find(car.course_application_id).course_id).title}", course_application_url(car.course_application_id, :course_tracker_id => params[:course_tracker_id]) %></td>
+		    <td style="width:10%"><%= link_to "#{CourseApplication.find(car.course_application_id).registrant.first_name} #{CourseApplication.find(car.course_application_id).registrant.last_name}", registrant_url(CourseApplication.find(car.course_application_id).registrant.id, :course_tracker_id => params[:course_tracker_id]) %></td>
+		    <% unless (link_to_attachments car).blank? %>
+		 	  <td style="width:20%"><%= car.first_name %> <%= car.last_name %></td>
+		      <td style="width:50%"><%= link_to_attachments car %></td>
+		    <% else %>
+			  <td style="width:10%"><%= car.first_name %> <%= car.last_name %></td>
+		      <td style="width:50%">No Files</td>
+		    <% end %>	
+		  <% end %>
+        <% elsif (User.current.logged?)%>
+          <!-- Registrant Role -->
+		  <% unless car.nil? %>
+		    <td style="width:20%"><%= link_to "#{Course.find(CourseApplication.find(car.course_application_id).course_id).title}", course_application_url(car.course_application_id, :course_tracker_id => params[:course_tracker_id]) %></td>
+		    <% unless (link_to_attachments car).blank? %>
+			  <td style="width:20%"><%= car.first_name %> <%= car.last_name %></td>
+			  <td style="width:30%"><%= car.updated_at %></td>
+		    <% else %>
+		      <td style="width:20%"><%= car.first_name %> <%= car.last_name %></td>
+		      <td style="width:30%">Letter Not Yet Uploaded</td>
+		    <% end %>
+		    <td style="width:30%;"><%= link_to "Resend Referral Request", resend_referral_course_application_referrals_path(:course_application => car.course_application_id, :course_application_referral => car.id) %></td>		
+		  <% end %>	
+        <% else %>
+          <!-- Anonymous Role -->
+          <!-- No view for Anonymous -->
+		  If you are not logged in, you can not view any applications you have previously submitted.
+        <% end %> 
+        </tr>
+      <% end %>
+    <% end %>
+</tbody>
+</table>
+

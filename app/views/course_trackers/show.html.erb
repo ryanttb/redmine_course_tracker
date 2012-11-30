@@ -1,0 +1,15 @@
+<% flash[:notice] %>
+<div class="contextual">
+  <%= link_to 'Return to Course Tracker List', course_trackers_url(:project_identifier => @course_tracker.project.identifier), :class => 'icon icon-history' %>
+</div>
+<h2><%= @course_tracker.title %></h2>
+
+<%= render :partial => "common/tabs" %>
+
+
+
+<br />
+<em>Please select a tab.</em>
+
+<br /><br />
+<em>Optional feature: A customized message could be placed here.</em>

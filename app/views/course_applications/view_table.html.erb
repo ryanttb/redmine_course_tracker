@@ -1,0 +1,41 @@
+<% flash[:notice] %>
+<div class="contextual">
+  <%= link_to 'Back', course_url(params[:course_id], :course_tracker_id => params[:course_tracker_id]), :class => 'icon icon-history' %>
+</div>
+<h2><%=h @course.course_tracker.title %>: Jobs: <em><%= @course.title %></em></h2>
+
+<% unless @course_applications.nil? %>
+	<p></p>
+	<h3>Submitted Applications - Total <%= @course_applications.length %></h3>
+	<table class="list">
+	  <thead>
+	    <tr>
+		  <th style="text-align:left;"></th>
+		  <% @columns.each do |column| %>
+		    <th style="text-align:left;"><%= column %></th>
+		  <% end %>
+		  <%= sort_header_tag('Review Status') %>
+		  <%= sort_header_tag('Acceptance Status') %>
+	    </tr>	
+	  </thead>
+	  <tbody>
+		<% @course_applications.each do |ca| %>
+		<tr>
+		  <td><%= link_to "View", course_application_path(ca) %></td>	
+		  <% @applicant_fields.each do |af| %>
+	        <td><%= ca.applicant.send(af) %></td>
+	      <% end %>
+		  <% @custom.each do |c| %>
+		    <% ca.custom_values.each do |cv| %>
+		      <% if cv.custom_field.name == c %>
+		        <td><%= show_value(cv) %></td>
+			  <% end %>
+		    <% end %>
+		  <% end %>
+		  <td><%=h ca.review_status %></td>
+		  <td><%=h ca.offer_status %></td>
+		</tr>
+		<% end %>
+	  </tbody>
+	</table>
+<% end %>

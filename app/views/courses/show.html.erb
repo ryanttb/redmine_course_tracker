@@ -1,0 +1,145 @@
+<script language="javascript">
+function toggle() {
+	var ele = document.getElementById("toggleText");
+	var text = document.getElementById("displayText");
+	if(ele.style.display == "block") {
+    		ele.style.display = "none";
+		text.innerHTML = "Register";
+  	}
+	else {
+		ele.style.display = "block";
+		text.innerHTML = "Register";
+	}
+} 
+
+function toggle2() {
+	var ele = document.getElementById("toggleText2");
+	var text = document.getElementById("displayText2");
+	if(ele.style.display == "block") {
+    		ele.style.display = "none";
+		text.innerHTML = "Register";
+  	}
+	else {
+		ele.style.display = "block";
+		text.innerHTML = "Register";
+	}
+}
+</script>
+<noscript>Please enable Javascript.</noscript>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag "assets.css", :plugin => "redmine_course_tracker", :media => "all" %>
+<% end %>
+
+
+<% flash[:notice] %>
+<div class="contextual">
+  <%= link_to 'Back', courses_url(:course_tracker_id => params[:course_tracker_id]), :class => 'icon icon-history' %>
+</div>
+
+<h2><%=h @course.course_tracker.title %>: Courses: <em><%=h @course.title %></em></h2>
+
+<%= render :partial => "common/tabs" %>
+
+<strong>
+<% if User.current.admin? || @course.is_manager? %>
+  <% unless @course_applications.length == 0 %>
+	  <h3>Course Application Viewing Options</h3>
+	  <p>
+	  <% form_tag({ :action =>  :export_to_csv }, :html => { :multipart => true })do -%>
+	    <%= hidden_field_tag :course_id, @course.id %>
+	    <%= submit_tag "Export All Registrants To CSV" -%>
+	  <% end -%>
+	  </p>
+	  <p>
+	  <%= button_to "View All Course Applications As Table", view_table_course_applications_path(:course_id => @course.id, :course_tracker_id => params[:course_tracker_id]) %>
+	  </p>	
+	  <p>
+	  <%= button_to "Filter Course Applications By Application Fields", filter_courses_path(:course_id => @course.id, :course_tracker_id => params[:course_tracker_id]) %>
+	  </p>
+	  <p>
+	  <%= button_to "Filter Course Applications by Status", filter_by_status_courses_path(:course_id => @course.id, :course_tracker_id => params[:course_tracker_id]) %>
+	  </p>
+  <% end %>
+  <% form_tag({:controller => 'courses', :action => 'zip_some'}, :id => 'registrant_form') do %>
+  <!-- render Course Applications partial -->
+  <h3>Submitted Applications - Total <%= @course_applications.length %></h3>
+  <%= render :partial => "course_applications/course_application_tables", :locals => { :box => true } %>
+    <p></p>
+	<% unless @course_applications.length == 0 %>
+	  <h3>Bulk Change Application Status</h3>
+      <p>
+	  <%= label_tag 'course_materials', 'Select Applications from above to Bulk Change Status'%><br />
+	  <br />
+      <%= label_tag(:review_status, "Review Status") %><br />
+      <%= select_tag(:review_status, options_for_select(CourseApplication::REVIEW_STATUS)) %>
+      <br />
+      <%= label_tag(:acceptance_status, "Acceptance Status") %><br />
+      <%= select_tag(:acceptance_status, options_for_select(CourseApplication::ACCEPTANCE_STATUS)) %>
+	  <br />
+	  <%= hidden_field_tag "course", @course.id %>
+	  <br />
+	  <%= submit_tag 'Bulk Change Status' %>
+	
+	  <p></p>
+      
+	  <h3>Zip/Download Submitted Materials</h3>
+      <p>
+	  <%= label_tag 'course_materials', 'Select Applications from above to Download Submitted Materials'%><br />
+	  <br />
+	  <% for material in @course.application_material_types.split(',') %>
+	    <%= check_box_tag "application_material_types[]", material, true %>
+	    <%= material %><br />
+	  <% end %>
+	  <% unless @course.referrer_count.nil? || @course.referrer_count == "0" %>
+	    <%= check_box_tag "registrant_referral", "referral", true %>
+	    Referral<br />
+	  <% end %>
+	  <%= hidden_field_tag "course", @course.id %>
+	  <br />
+	  <%= submit_tag 'Create zip file of selected materials' %> (batches all materials for all selected candidates into one folder)
+	<% end %>
+  <% end %>
+  <% unless @course_applications.length == 0 %>
+	  <p>
+	    <%= button_to "Zip all materials for all candidates into unique folders", zip_all_courses_path(:course => @course.id) %>
+	  </p>
+  <% end %>	
+  </p>
+
+<% else %>
+<span class="access-account">
+  <%= link_to "Apply to this course", new_registrant_url(:course_tracker_id => @course_tracker.id, :course_id => @course.id) %>
+</span>	
+<% end %>
+</strong>
+	
+<p></p>
+<h3>Course Details</h3>
+<p>
+<strong>Category:</strong> <%=h @course.category %><br />
+<br />
+<strong>Application Deadline:</strong> <%= (User.current.admin? || @course.is_manager?) ? "#{@course.submission_date.strftime("%m/%d/%Y")} #{@course.submission_date.strftime("%I:%M %p")} ET" : "#{@course.display_deadline}" %>
+<br />
+<br />
+<% unless @course.application_material_types.nil? || @course.application_material_types.empty? %>	
+  <strong>Application materials that will be uploaded into the system:</strong>
+  <ul>
+  <% @course.application_material_types.split(',').each do |amt| %>
+    <li><%=h amt %></li>
+  <% end %>
+  </ul>
+<% end %>
+
+<% unless @course.referrer_count == "0" %>
+<p><%=h @course.referrer_count %> reference(s) are required for this position.</p>
+<% end %>
+
+<strong>Description:</strong> <%= textilizable @course.description %><br />
+
+<% unless @course_attachment.nil? || @course_attachment.attachments.empty? %>
+<h3>Course Attachments</h3>
+  <%= link_to_attachments @course_attachment %>
+<% end %>
+</p>
+

@@ -1,0 +1,12 @@
+<% flash[:notice] %>
+<div class="contextual">
+  <% #link_to 'Back', course_applications_url, :class => 'icon icon-history' 
+%>
+</div>
+<h2><%=h @course_tracker.title %>: Course Application Materials </h2> 
+
+<%= render :partial => "common/tabs" %>
+
+<%= render :partial => "course_application_material_tables" %>
+
+<br /><br />

@@ -1,0 +1,59 @@
+<% flash[:notice] %>
+
+<h2><%=h CourseTracker.find(@course_application.course_tracker_id).title %>: <%=h Course.find(@course_application.course_id).title %> </h2> 
+
+<%= render :partial => "common/tabs" %>
+
+<p>	
+<% if (@course_application.course.submission_date > DateTime.now && User.current.mail == @registrant.email) %>
+  <%= link_to 'Edit Application', edit_course_application_url(@course_application.id, :course_tracker_id => params[:course_tracker_id]), :class => 'icon icon-edit' %><br /><br />
+<% elsif User.current.admin? || @course_application.course.is_manager? %>
+  <%= link_to 'Add Notes/Comments', edit_course_application_url(@course_application.id, :course_tracker_id => params[:course_tracker_id]), :class => 'icon icon-edit' %><br /><br />
+<% end %>
+Course Title: <%= link_to Course.find(@course_application.course_id).title, course_path(@course_application.course_id, :course_tracker_id => @course_application.course_tracker_id) %><br />
+
+<%= render :partial => 'registrant_info', :locals => { :registrant => @registrant } %>
+
+  <h3>Additional Information</h3>
+  <% @course_application.custom_values.each do |custom_value| %>
+	<% if !custom_value.value.blank? %>
+	  <p><%= custom_value.custom_field.name%>: <%=h show_value(custom_value) %></p>
+	<% end %>
+  <% end -%>
+
+<h3>Course Application Attachments</h3>
+<% unless @course_application_materials.nil? || @course_application_materials.blank? %>
+  <% @course_application_materials.each do |cam| %>
+    <%= link_to_attachments cam %><br />
+  <% end %>  
+<% else %>
+  No attachments.
+<% end %>
+<br />
+<% unless @course_application.course.referrer_count == "0" %>
+	<h3>Course Application Referrals</h3>
+	<% if User.current.admin?  || @course_application.course.is_manager? %>
+		<% unless @course_application_referrals.nil? || @course_application_referrals.blank? %>
+		  <% @course_application_referrals.each do |car| %>
+		    <p>
+		      Name: <%= car.first_name %> <%= car.last_name %><br />
+		      Email: <%= car.email %><br />
+		      Title: <%= car.title %><br />
+		      Notes: <%= car.notes %><br />
+		      <%= link_to_attachments car %>
+		    </p>
+		  <% end %>
+		<% else %>
+		  No referrals.
+		<% end %>
+		</p>
+		<br />
+	
+		<h3>Admin Notes</h3>
+	  	<p><%= @course_application.notes %></p>
+	<% else %>
+	    <p>Referrals Submitted: <%= @course_application.course_application_referrals.all.empty? ? 0 : @course_application.course_application_referrals.all.length %></p>
+	<% end %>
+<% end %>
+
+<br /><br />

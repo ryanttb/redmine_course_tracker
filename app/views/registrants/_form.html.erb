@@ -1,0 +1,32 @@
+<span class="required">*</span> Required Fields
+<% form_for(@registrant) do |f| %>
+  <%= f.error_messages %>
+  <%= hidden_field_tag :course_tracker_id, @course_tracker.id %>
+  <% unless @course.nil? %>
+	<%= hidden_field_tag :course_id, @course.id  %>
+  <% end %>	
+  <h3>General Information</h3>
+  <p>
+    <%= f.label(:first_name, "First Name") %><span class="required">*</span><br />
+    <%= f.text_field(:first_name) %>
+  </p>
+
+  <p>
+    <%= f.label(:last_name, "Last Name") %><span class="required">*</span><br />
+    <%= f.text_field(:last_name) %>
+  </p>
+
+  <p>
+    <%= f.label(:email, "Email") %><span class="required">*</span><br />
+    <%= f.text_field(:email) %>
+  </p>
+
+  <p>
+    <%= f.label(:phone, "Phone") %><br />
+    <%= f.text_field(:phone) %>
+  </p>
+
+  <p>
+    <%= f.submit('Save') %>
+  </p>
+<% end %>

@@ -1,0 +1,2 @@
+module CourseApplicationsHelper
+end

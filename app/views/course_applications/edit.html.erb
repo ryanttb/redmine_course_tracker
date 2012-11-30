@@ -1,0 +1,85 @@
+<script>
+document.observe("dom:loaded", function() {
+	$$('input[name="attachments[1][file]"]').each(function(elem, i){ $(elem).writeAttribute('name', 'attachments[' + (i + 1) + '][file]').next('label.inline').remove(); });
+});
+</script>
+
+<% flash[:notice] %>
+<div class="contextual">
+  <%= link_to 'Back', course_url(@course_application.course, :course_tracker_id => params[:course_tracker_id]), :class => 'icon icon-history' %>
+</div>
+
+<h2><%=h CourseTracker.find(@course_application.course_tracker_id).title %>: <%=h Course.find(@course_application.course_id).title %> </h2>
+
+<%= render :partial => "common/tabs" %>
+<span class="required">*</span> Required Fields
+<%= render :partial => 'registrant_info', :locals => { :registrant => @registrant, :course_tracker_id => params[:course_tracker_id] } %>
+<br /><br />
+<% form_for(@course_application, :html => {:multipart => true}) do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field(:course_tracker_id, :value => @course_tracker.id ) %>
+  <%= f.hidden_field(:registrant_id, :value => @registrant.id ) %>
+  <%= f.hidden_field(:course_id, :value => @course.id ) %>
+  
+  <% if(User.current.admin? || @course.is_manager?) %>
+    <h3>Course Application Status</h3>
+	<p>
+      <%= f.label(:review_status, "Review Status") %><br />
+      <%= f.select(:review_status, CourseApplication::REVIEW_STATUS) %>
+    </p>
+	<p>
+      <%= f.label(:acceptance_status, "Acceptance Status") %><br />
+      <%= f.select(:acceptance_status, CourseApplication::ACCEPTANCE_STATUS) %>
+    </p>
+	<h3>Admin Notes</h3>
+	<p>
+      <%= f.label(:notes) %><br />
+      <%= f.text_area(:notes) %>
+    </p>
+  <% end %>
+
+  <% if(User.current.admin? || @course.is_manager?) %>
+	<h3>Additional Information</h3>
+    <% @course_application.custom_values.each do |custom_value| %>
+	  <% if !custom_value.value.blank? %>
+	    <p><%= custom_value.custom_field.name%>: <%=h show_value(custom_value) %></p>
+	  <% end %>
+    <% end -%>
+  <% else %>
+    <p><%= render :partial => 'list_course_custom_fields', :locals => { :course => @course, :course_application => @course_application } %></p>
+  <% end %>
+
+  <br />
+  <h3>Course Application Materials</h3>
+    <% unless @course_application_materials.nil? || @course_application_materials.empty? %>
+	  <h4>Existing</h4>
+	  <% @course_application_materials.each do |cam| %>
+	    <%= link_to_attachments cam %><br />
+	  <% end %>  
+	<% else %>
+	  <% @course_application.course_application_materials.build() %>
+	<% end %>
+	
+	<% if User.current.mail == @registrant.email %>
+    	<% unless @course.application_material_types.nil? || @course.application_material_types.empty? %>	
+		  <% @course.application_material_types.split(',').each do |amt| %>
+			<h4><%=h amt %></h4>
+
+		    <% f.fields_for :course_application_materials do |cam| %>
+			  <%= cam.hidden_field(:course_application_id, :value => @course_application.id ) %>
+			  <div class="box">
+				<p><label><%=l(:label_attachment_plural)%></label><span class="required">*</span><%= render :partial => 'attachments/form' %></p>
+			  </div>
+		    <% end %>
+		  <% end %>
+		<% end %>
+	<% end %>	
+  
+  <br /><br />
+  <p>
+	<strong>You have edited your application materials for this course. By clicking the below button, you are submitting your application with the new edits.</strong>
+	<br /><br />
+    <%= f.submit('Submit Application') %>
+  </p>
+<% end %>
+

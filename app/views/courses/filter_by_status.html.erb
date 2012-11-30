@@ -1,0 +1,83 @@
+<% flash[:notice] %>
+<div class="contextual">
+  <%= link_to 'Back', course_url(params[:course_id], :course_tracker_id => params[:course_tracker_id]), :class => 'icon icon-history' %>
+</div>
+<h2><%=h @course.course_tracker.title %>: Courses: <em><%= @course.title %></em></h2>
+
+<%= render :partial => "common/tabs" %>
+
+<h3>Filter Course Applications by Status</h3>
+<p>The filter will be applied to all applications that match <strong>any</strong> of the options you choose.</p>
+
+<% form_tag({:controller => 'courses', :action => 'filter_by_status'}) do %>
+  <%= hidden_field_tag :course_id, @course.id %>
+  <%= hidden_field_tag :course_tracker_id, @course_tracker.id %>
+  <p>
+    <%= label_tag(:review_status, "Review Status") %><br />
+    <%= select_tag(:review_status, options_for_select(CourseApplication::REVIEW_STATUS)) %>
+  </p>
+  <p>
+    <%= label_tag(:offer_status, "Offer Status") %><br />
+    <%= select_tag(:offer_status, options_for_select(CourseApplication::ACCEPTANCE_STATUS)) %>
+  </p>
+  <%= submit_tag "Filter by Status" -%>
+<% end %>
+
+<% unless @course_applications.nil? || @course_applications.empty? %>
+    <p></p>
+	<h3>Results - <%= @course_applications.length %></h3>
+	
+	<p>	
+	  <% form_tag({ :action =>  :export_filtered_to_csv }, :html => { :multipart => true })do -%>
+	    <%= hidden_field_tag :course_id, @course.id %>
+		<% @course_applications.each do |ja| %>
+	      <%= hidden_field_tag "course_app_ids[]", ja.id %>
+	    <% end %>
+	    <%= submit_tag "Export Filtered Results To CSV" -%>
+	  <% end -%>
+	</p>
+	<p>
+	  <%= button_to 'Zip Materials for Filtered Results Into Single Folder', zip_filtered_single_courses_path(:course_id => @course.id, :course_applications => @course_applications) %>
+	</p>
+	<p>
+	  <%= button_to 'Zip Materials for Filtered Results Into Folders by Applicant', zip_filtered_courses_path(:course_id => @course.id, :course_applications => @course_applications) %>
+	</p>
+	
+	<table class="list">
+	  <thead>
+	    <tr>
+		  <th style="text-align:left;"></th>
+		  <% @columns.each do |column| %>
+		    <th style="text-align:left;"><%= column %></th>
+		  <% end %>
+		  <th style="text-align:left;">Submission Status</th>
+		  <th style="text-align:left;">Review Status</th>
+		  <th style="text-align:left;">Offer Status</th>
+	    </tr>	
+	  </thead>
+	  <tbody>
+		<% @course_applications.each do |ja| %>
+		<tr>
+		  <td><%= link_to "View", course_application_path(ja, :course_tracker_id => @course_tracker.id) %></td>	
+		  <% @columns.each do |column| %>
+		    <% if @applicant_fields.include?(column) %>
+	          <td><%= ja.applicant.send(column) %></td>
+	        <% end %>
+		    <% if @custom.include?(column) %>
+			  <% ja.custom_values.each do |cv| %>
+		        <% if cv.custom_field.name == column %>
+		          <td><%= show_value(cv) %></td>
+			    <% end %>
+		      <% end %>
+			<% end %>
+		  <% end %>
+		  <td><%= ja.submission_status %></td>
+		  <td><%= ja.review_status %></td>
+		  <td><%= ja.offer_status %></td>
+		</tr>
+		<% end %>
+	  </tbody>
+	</table>
+<% else %>
+  <p>No applications found.	</p>
+<% end %>

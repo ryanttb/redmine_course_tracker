@@ -1,0 +1,16 @@
+<h3>Registrant Information - <%=h "#{@registrant.last_name}, #{@registrant.first_name}"%></h3>
+
+<div style="float: left; width: 20%;">
+	<b>General Information</b>
+	<p>
+	Name: <%=h "#{@registrant.last_name}, #{@registrant.first_name}"%><br /> 
+	Email: <%=h @registrant.email %><br /> 
+	Phone: <%=h @registrant.phone %> <br /> 
+</p>
+
+</div>
+<% if User.current.mail == @registrant.email %>
+<p>
+	<%= link_to 'Edit', edit_registrant_url(@registrant.id, :course_tracker_id => params[:course_tracker_id]), :class => 'icon icon-edit' %>
+</p>
+<% end %>

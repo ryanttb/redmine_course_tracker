@@ -1,0 +1,36 @@
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag "assets.css", :plugin => "redmine_course_tracker", :media => "screen" %>
+<% end %>
+
+<% flash[:notice] %>
+<div class="contextual">
+  <%= link_to 'Back', registrants_url, :class => 'icon icon-history' %>
+</div>
+
+<h2><%=h CourseTracker.find(params[:course_tracker_id]).title %>: <em><%=h "#{@registrant.last_name}, #{@registrant.first_name} "%></em></h2>
+
+<%= render :partial => "common/tabs" %>
+
+<h3>Registrant Information</h3>
+
+<div style="float: left; width: 20%;">
+	<b>General Information</b>
+	<p>
+	Name: <%=h "#{@registrant.last_name}, #{@registrant.first_name}"%><br />
+	Email: <%=h @registrant.email %><br /> 
+	Phone: <%=h @registrant.phone %> <br /> 
+</p>
+
+</div>
+<% if User.current.mail == @registrant.email %>
+  <p>
+	<%= link_to 'Edit', edit_registrant_url(@registrant.id, :course_tracker_id => params[:course_tracker_id]), :class => 'icon icon-edit' %>
+  </p>
+<%elsif User.current.admin? %>
+  <h3>Submitted Applications </h3>
+  <%= render :partial => "course_applications/course_application_tables", :locals => { :box => false } %>
+  <br /><br />
+<% end %>
+
+<%= link_to 'View Open Courses', courses_url(:course_tracker_id => params[:course_tracker_id], :project_identifier => params[:project_identifier]) %>
+

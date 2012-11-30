@@ -1,0 +1,2 @@
+module CourseApplicationReferralsHelper
+end

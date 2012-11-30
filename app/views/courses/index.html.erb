@@ -1,0 +1,19 @@
+<% flash[:notice] %>
+<div class="contextual">
+  <% if (User.current.admin?) %>
+    <%= link_to('New Course', new_course_url(:course_tracker_id => params[:course_tracker_id]), :class => 'icon icon-add') %> |
+  <% end %>
+  <%= link_to 'Return to Course Tracker List', 
+    course_trackers_url(:project_identifier => CourseTracker.find(params[:course_tracker_id]).project.identifier), 
+    :class => 'icon icon-history' 
+  %>
+</div>
+<h2><%=h CourseTracker.find(params[:course_tracker_id]).title %>: Courses</h2>
+
+<%= render :partial => "common/tabs" %>
+
+<%= render :partial => "course_tables" %>
+
+<br /><br />
+
+

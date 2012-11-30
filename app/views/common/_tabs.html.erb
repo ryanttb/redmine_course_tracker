@@ -1,0 +1,51 @@
+<div class="tabs"> 
+  <ul>
+    <% if(User.current.admin?)%>
+      <!-- Admin Role -->
+      
+      <li><%= link_to 'All Courses', courses_url(:course_tracker_id => params[:course_tracker_id], :project_identifier => params[:project_identifier]), 
+          {:id => 'tab-Courses', :onclick => "showTab('Courses'); this.blur(); return false;"} %>
+      </li>
+      <li><%= link_to 'Accounts', registrants_url(:course_tracker_id => params[:course_tracker_id], :project_identifier => params[:project_identifier]),
+          {:id => 'tab-Registrants', :onclick => "showTab('Registrants'); this.blur(); return false;"} %>
+      </li>
+    <% elsif User.current.member_of?(CourseTracker.find(@course_tracker.id).project) %>
+	  <!-- Manager Role -->
+      <li><%= link_to 'All Courses', courses_url(:course_tracker_id => params[:course_tracker_id], :project_identifier => params[:project_identifier]), 
+          {:id => 'tab-Courses', :onclick => "showTab('Courses'); this.blur(); return false;"} %>
+      </li>
+    <% elsif (User.current.logged?)%>
+      <!-- Registrant Role -->
+      <li><%= link_to 'Open Courses', courses_url(:course_tracker_id => params[:course_tracker_id], :project_identifier => params[:project_identifier]), 
+        {:id => 'tab-Courses', :onclick => "showTab('Courses'); this.blur(); return false;"} %>
+      </li>
+      
+	  <% unless Registrant.find_by_email(User.current.mail).nil? %>
+	    <li><%= link_to 'My Profile', registrant_url(Registrant.find_by_email(User.current.mail), :course_tracker_id => params[:course_tracker_id], :project_identifier => params[:project_identifier]), 
+        {:id => 'tab-MyInfo', :onclick => "showTab('MyInfo'); this.blur(); return false;"} %>
+        </li>
+	  <% else %>
+	    <li><%= link_to 'My Profile', new_registrant_url(:course_tracker_id => @course_tracker.id), 
+        {:id => 'tab-MyInfo', :onclick => "showTab('MyInfo'); this.blur(); return false;"} %>
+        </li>
+      <% end %>
+	  
+	  <li><%= link_to 'My Course Applications', course_applications_url(
+        :course_tracker_id => params[:course_tracker_id], 
+        :project_identifier => params[:project_identifier], 
+        :registrant_id => User.current.id), 
+        {:id => 'tab-CourseApplications', :onclick => "showTab('CourseApplications'); this.blur(); return false;"} %>
+      </li>
+    <% else %>
+      <!-- Anonymous Role -->
+      <li><%= link_to 'Open Courses', courses_url(:course_tracker_id => params[:course_tracker_id], :project_identifier => params[:project_identifier]), 
+        {:id => 'tab-Courses', :onclick => "showTab('Courses'); this.blur(); return false;"} %>
+      </li>
+    <% end %>
+  </ul> 
+  <div class="tabs-buttons" style="display:none;"> 
+  	<button class="tab-left" onclick="moveTabLeft(this);"></button> 
+  	<button class="tab-right" onclick="moveTabRight(this);"></button> 
+  </div> 
+</div>
+

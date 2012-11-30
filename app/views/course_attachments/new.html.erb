@@ -1,0 +1,8 @@
+<h2>CourseAttachments#new</h2>
+
+<% form_tag({:controller => 'course_application_materials', :action => 'new', :course => @course, :course_tracker => @course_tracker}, :class => "tabular", :multipart => true) do %>
+<div class="box">
+	<p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
+</div>
+<%= submit_tag l(:button_add) %>
+<% end %> 

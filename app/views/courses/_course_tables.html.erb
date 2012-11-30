@@ -1,0 +1,65 @@
+<table class="list">
+<thead>
+  <tr>
+    <% if(User.current.admin?)%>
+      <!-- Admin scope -->
+      <%= sort_header_tag('title') %>
+      <%= sort_header_tag('category') %>
+      <%= sort_header_tag('short_desc', :caption => 'Short Description') %>
+      <%= sort_header_tag('course_status') %>
+	  <%= sort_header_tag('application_deadline') %>
+      <th></th>
+	  <th></th>
+    <% elsif (User.current.logged?)%>
+      <!-- Registrant scope -->
+      <%= sort_header_tag('title') %>
+      <%= sort_header_tag('category') %>
+      <%= sort_header_tag('short_desc') %>
+	  <%= sort_header_tag('application_deadline') %>
+      <th></th>
+    <% else %>
+      <!-- Anonymous scope -->
+      <%= sort_header_tag('title') %>
+      <%= sort_header_tag('category') %>
+      <%= sort_header_tag('short_desc') %>
+	  <%= sort_header_tag('application_deadline') %>
+    <% end %>
+  </tr>
+</thead>
+<tbody>
+  <% @courses.each do |course| %>
+    <tr>
+      <% if(User.current.admin?)%>
+        <!-- Admin scope -->
+        <td><%= link_to "#{course.title}", course_url(course.id, :course_tracker_id => params[:course_tracker_id]) %></a></td>
+        <td><%=h course.category %></a></td>
+        <td><%= textilizable course.short_desc %></td>
+        <td><%=h course.status %></td>
+		<td><%=h course.submission_date.month %>/<%=h course.submission_date.day %>/<%=h course.submission_date.year %> <%= course.submission_date.strftime("%I:%M %p") %> ET</td>
+        <td><%= link_to 'Edit', edit_course_url(course.id, :course_tracker_id => params[:course_tracker_id]), :class => 'icon icon-edit' %></td>
+        <td><%= link_to 'Delete', course_url(:id => course.id, :course_tracker_id => params[:course_tracker_id]), 
+          :confirm => "All links to registrants will be destroyed.  Are you sure you want to delete the \"#{course.title}\" course?", 
+          :method => :delete,
+          :class => 'icon icon-del' %>
+        </td>
+      <% elsif course.status != 'inactive' %> 
+        <% if User.current.logged? %>
+          <!-- Registrant scope -->
+          <td><%= link_to "#{course.title}", course_url(course.id, :course_tracker_id => params[:course_tracker_id]) %></td>
+          <td><%=h course.category %></td>
+          <td><%= textilizable course.short_desc %></td>
+		  <td><%=h course.display_deadline %> ET</td>
+          <td></td>
+        <% else %>
+          <!-- Anonymous scope -->
+          <td><%= link_to "#{course.title}", course_url(course.id, :course_tracker_id => params[:course_tracker_id]) %></a></td>
+          <td><%=h course.category %></a></td>
+          <td><%= textilizable course.short_desc %></td>
+		  <td><%=h course.display_deadline %></td>
+        <% end %>
+      <% end %>
+    </tr>
+  <% end %>
+</tbody>
+</table>
+

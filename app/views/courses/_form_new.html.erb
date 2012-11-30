@@ -1,0 +1,95 @@
+<span class="required">*</span> Required Fields
+<% form_for(@course, :html => {:multipart => true}) do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field(:course_tracker_id, :value => @course_tracker.id ) %>
+
+  <p>
+    <%= f.label(:category) %><span class="required">*</span><br />
+    <%= f.select(:category, Course::COURSE_CATEGORIES, {:include_blank => true}) %>
+  </p>
+
+  <p>
+    <%= f.label(:status) %><span class="required">*</span><br />
+    <%= f.select(:status, Course::COURSE_STATUS, {:include_blank => true}) %>
+  </p>
+
+  <p>
+    <%= f.label(:title) %><span class="required">*</span><br />
+    <%= f.text_field(:title) %>
+  </p>
+
+  <p>
+    <%= f.label(:short_desc) %><span class="required">*</span><br />
+    <%= f.text_area(:short_desc, :rows => 5, :class => 'wiki-edit') %>
+	<%= wikitoolbar_for 'short_desc' %>
+  </p>
+
+  <p>
+    <%= f.label(:description) %><span class="required">*</span><br />
+    <%= f.text_area(:description, :rows => 12, :class => 'wiki-edit') %>
+	<%= wikitoolbar_for 'course_description' %>
+  </p>
+
+   <p>
+    <%= f.label(:spots_available, "Spots Available") %><br />
+    <%= f.text_field(:spots_available, :value => 1, :size => 3) %>
+  </p>
+  
+  <p>
+    <%= f.label(:application_followup_message, "Application Follow-up Message") %><span class="required">*</span><br />
+    <%= f.text_area(:application_followup_message, :size => "60x5") %>
+  </p>
+
+  <p>
+    <%= f.label(:referrer_count, "Amount of Referrals Needed") %><span class="required">*</span><br />
+    <%= f.text_field(:referrer_count, :size => 3) %>
+  </p>
+  
+  <p>
+  	<%= f.label :submission_date, "Application Deadline" %><br />
+  	<%= f.datetime_select :submission_date %><br />
+  </p>
+  
+  <p>
+	<%= label_tag 'course_materials', 'Required Application Materials'%><br />
+	<% for material in Course::COURSE_MATERIALS %>
+	  <%= check_box_tag "application_material_types[]", material, @course.application_material_types.nil? ? false : @course.application_material_types.split(',').include?(material) %>
+	  <%= material %>
+	  <br />
+	<% end %>
+	<br />
+	<%= label_tag 'course_materials', 'Other (comma separated)'%><br />
+	<%= text_field_tag "other_app_materials" %>
+	<br />
+  </p>
+  
+  <br />
+  <h3>Course Attachments</h3>
+
+    <% @course.course_attachments.build() %>
+    
+      <% f.fields_for :course_attachments do |ja| %>
+		
+		<%= ja.hidden_field(:course_id, :value => @course ) %>
+        <% #NOTE This is the code that attaches to Redmine's built-in Attachment model %>
+		<div class="box">
+			<p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
+		</div>
+		
+		<!--
+        <%= ja.label(:notes, 'Notes/Description (Optional):') %><br />
+        <%= ja.text_area(:notes, :size => "60x5") %><br />
+        <small>
+          <%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>
+        </small>
+		-->
+      <% end %>
+
+      <br /><br />
+
+
+  <p>
+  <%= f.submit('Save') %>
+  </p>
+<% end %>
+

@@ -1,0 +1,17 @@
+<% flash[:notice] %>
+<div class="contextual">
+  <% if (User.current.admin?) %>
+    <%= link_to 'New Registrant', new_registrant_url(:course_tracker_id => @course_tracker.id), :class => 'icon icon-add' %> |
+  <% end %>
+  <%= link_to 'Return to Course Tracker List', course_trackers_url(:project_identifier => @course_tracker.project.identifier), :class => 'icon icon-history' %>
+</div>
+
+<h2><%=h CourseTracker.find(params[:course_tracker_id]).title %>: Registrants</h2>
+
+<% # Provide a tab set for the admin role %>
+<% if(User.current.admin?)%>
+  <%= render :partial => 'common/tabs' %>
+  <%= render :partial => 'registrant_tables' %>
+<% end %>
+
+

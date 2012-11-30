@@ -1,0 +1,17 @@
+<%= flash[:notice] %>
+<div class="contextual">
+  <% #link_to 'Back', course_applications_url, :class => 'icon icon-history' 
+%>
+</div>
+<h2>Submitted Applications </h2> 
+
+<%= render :partial => "common/tabs" %>
+
+<% if User.current.admin? %>
+  <%= render :partial => "course_application_tables", :locals => { :box => true } %>
+<% else %>
+  <%= render :partial => "course_application_tables" %>
+<% end %>
+
+<br /><br />
+

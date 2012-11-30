@@ -1,0 +1,6 @@
+<h2><%=h @project.name %>: <em>New Course Tracker</em></h2>
+
+<%= render :partial => "admin_form" %>
+
+<br />
+<%= link_to 'Back', course_trackers_url(:project_identifier => @project.identifier) %>

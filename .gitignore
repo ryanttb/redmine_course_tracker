@@ -1,0 +1,24 @@
+/db/migrate/007_add_test_data.rb
+*.tmp__*
+*.tmp_*
+
+# Ignore bundler config
+/.bundle
+
+# Ignore the default SQLite database.
+/db/*.sqlite3
+config/database.yml
+
+# Ignore all logfiles and tempfiles.
+/log/*.log
+/tmp
+/log/*.log
+/log/*.lck
+/log/*.1
+
+# Mac specific
+.DS_Store
+
+# Backup files
+*.swp
+*~

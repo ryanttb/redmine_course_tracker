@@ -1,0 +1,48 @@
+<table class="list">
+<thead>
+  <tr>
+    <% if(User.current.admin?)%>
+      <!-- Admin Role -->
+      <%= sort_header_tag('first_name') %>
+	  <%= sort_header_tag('last_name') %>
+      <th></th>
+      <th></th>
+
+    <% elsif (User.current.logged?)%>
+      <!-- Registrant Role -->
+      <!-- No view for registrants -->
+    <% else %>
+      <!-- Anonymous Role -->
+      <!-- No view for Anonymous -->
+
+    <% end %> 
+  </tr>
+</thead>
+<tbody>
+  <% @registrants.each do |registrant| %>
+    <tr>
+      <% if(User.current.admin?)%>
+        <!-- Admin Role -->
+        <td><%= link_to "#{registrant.first_name}", registrant_url(registrant.id, :apptracker_id => params[:apptracker_id]) %></a></td>
+		<td><%= link_to "#{registrant.last_name}", registrant_url(registrant.id, :apptracker_id => params[:apptracker_id]) %></a></td>
+    	<td><%= link_to 'Edit', edit_registrant_url(registrant.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %></td>
+      	<td><%= link_to 'Delete', registrant_url(:id => registrant.id, :apptracker_id => params[:apptracker_id]), 
+        :confirm => "Are you sure you want to delete #{registrant.first_name} #{registrant.last_name}\'s record?", 
+        :method => :delete,
+        :class => 'icon icon-del' %>
+      </td>
+
+      <% elsif (User.current.logged?)%>
+        <!-- Registrant Role -->
+        <!-- No view for Registrants -->
+
+      <% else %>
+        <!-- Anonymous Role -->
+        <!-- No view for Anonymous -->
+
+      <% end %> 
+    </tr>
+  <% end %>
+</tbody>
+</table>
+

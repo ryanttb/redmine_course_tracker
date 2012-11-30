@@ -1,0 +1,72 @@
+<table class="list">
+<thead>
+  <tr>
+    <% if(User.current.admin?)%>
+      <!-- Admin Role -->
+	  <th style="width:10%; text-align:left;">Application For</th>
+      <th style="width:10%; text-align:left;">Registrant</th>
+	  <th style="width:40%; text-align:left;">Registrant Files</th>
+	  <th style="width:40%; text-align:left;">Referral Files</th>
+
+    <% elsif (User.current.logged?)%>
+      <!-- Registrant Role -->
+	  <th style="width:30%; text-align:left;">Application For</th>
+	  <th style="width:50%; text-align:left;">File</th>
+      <th style="width:20%; text-align:left;">Date Submitted</th>
+    <% else %>
+      <!-- Anonymous Role -->
+      <!-- No view for Anonymous -->
+
+    <% end %> 
+  </tr>
+</thead>
+<tbody>
+	<% if @course_application_material.nil? %>
+	  no application materials yet!
+	<% else %>  
+  	  <% @course_application_material.each do |cam| %>
+        <tr>
+		<% if(User.current.admin?)%>
+          <!-- Admin Role -->
+		  <td style="width:10%"><%= link_to "#{Course.find(CourseApplication.find(cam.course_application_id).course_id).title}", course_application_url(cam.course_application_id, :course_tracker_id => params[:course_tracker_id]) %></td>
+		  <td style="width:10%"><%= link_to "#{CourseApplication.find(cam.course_application_id).registrant.first_name} #{CourseApplication.find(cam.course_application_id).registrant.last_name}", registrant_url(CourseApplication.find(cam.course_application_id).registrant.id, :course_tracker_id => params[:course_tracker_id]) %></td>
+		  <% unless (link_to_attachments cam).blank? %>
+		    <td style="width:40%"><%= link_to_attachments cam %></td>
+		  <% else %>
+		    <td style="width:40%">No Files</td>
+		  <% end %>	
+		  
+		  <% @course_application_referral = Array.new %>
+          <% @course_application_referral << CourseApplication.find(cam.course_application_id).course_application_referrals %>
+          <% @course_application_referral.flatten! %>
+		  <td style="width:40%">
+		  <% @course_application_referral.each do |car| %>
+		    <% unless (link_to_attachments car).blank? %>
+		      <%= link_to_attachments car %>
+		    <% else %>
+		      No Files
+		    <% end %>
+          <% end %>
+		  </td>
+        <% elsif (User.current.logged?)%>
+          <!-- Registrant Role -->
+		  <td style="width:30%"><%= link_to "#{Course.find(CourseApplication.find(cam.course_application_id).course_id).title}", course_application_url(cam.course_application_id, :course_tracker_id => params[:course_tracker_id]) %></td>
+		  <% unless (link_to_attachments cam).blank? %>
+		    <td style="width:50%"><%= link_to_attachments cam %></td>
+		  <% else %>
+		    <td style="width:50%">No Files</td>
+		  <% end %>	
+		  <td style="width:20%"><%= cam.created_at %></td>
+        <% else %>
+          <!-- Anonymous Role -->
+          <!-- No view for Anonymous -->
+		  If you are not logged in, you can not view any application materials you have previously submitted.
+        <% end %> 
+        </tr>
+      <% end %>
+    <% end %>
+	
+
+</tbody>
+</table>
+

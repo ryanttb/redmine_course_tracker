@@ -1,0 +1,12 @@
+<h2><%=h @course_tracker.title %>: <em>Edit Course</em></h2>
+<%= render :partial => "common/tabs" %>
+<%= render :partial => "form_edit" %>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'assets', :plugin => 'redmine_course_tracker' %>
+<% end %>
+<br />
+
+<div style="width:100%; float:left; margin-top: 20px;">
+<%= link_to 'Back', courses_url(:course_tracker_id => params[:course_tracker_id]) %>
+</div>

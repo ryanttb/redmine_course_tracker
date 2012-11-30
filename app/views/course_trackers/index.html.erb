@@ -1,0 +1,13 @@
+<% flash[:notice] %>
+<div class="contextual">
+<% if(User.current.admin?) %>
+  <%= link_to('New Course Tracker', new_course_tracker_url(:project_identifier => params[:project_identifier]), :class => 'icon icon-add')%>
+<% end %>
+</div>
+<h2>Course Trackers</h2>
+
+<%= render(:partial => "course_tracker_tables") %>
+
+<br /><br />
+
+

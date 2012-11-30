@@ -11,7 +11,7 @@ document.observe("dom:loaded", function() {
 
 <h2><%=h CourseTracker.find(@course_application.course_tracker_id).title %>: <%=h Course.find(@course_application.course_id).title %> </h2>
 
-<%= render :partial => "common/tabs" %>
+<%= render :partial => "mutual/tabs" %>
 <span class="required">*</span> Required Fields
 <%= render :partial => 'registrant_info', :locals => { :registrant => @registrant, :course_tracker_id => params[:course_tracker_id] } %>
 <br /><br />

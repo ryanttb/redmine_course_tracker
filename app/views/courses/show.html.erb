@@ -39,7 +39,7 @@ function toggle2() {
 
 <h2><%=h @course.course_tracker.title %>: Courses: <em><%=h @course.title %></em></h2>
 
-<%= render :partial => "common/tabs" %>
+<%= render :partial => "mutual/tabs" %>
 
 <strong>
 <% if User.current.admin? || @course.is_manager? %>

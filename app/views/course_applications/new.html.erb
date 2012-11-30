@@ -11,7 +11,7 @@ document.observe("dom:loaded", function() {
 
 <h2><%=h @course.course_tracker.title %>: Courses: <em><%=h @course.title %></em></h2>
 
-<%= render :partial => "common/tabs" %>
+<%= render :partial => "mutual/tabs" %>
 <span class="required">*</span> Required Fields
 
 <% form_for(@course_application, :html => {:multipart => true}) do |f| %>

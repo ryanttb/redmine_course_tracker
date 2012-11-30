@@ -2,7 +2,7 @@
 
 <h2><%=h CourseTracker.find(@course_application.course_tracker_id).title %>: <%=h Course.find(@course_application.course_id).title %> </h2> 
 
-<%= render :partial => "common/tabs" %>
+<%= render :partial => "mutual/tabs" %>
 
 <p>	
 <% if (@course_application.course.submission_date > DateTime.now && User.current.mail == @registrant.email) %>

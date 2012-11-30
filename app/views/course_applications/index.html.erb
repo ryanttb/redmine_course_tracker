@@ -5,7 +5,7 @@
 </div>
 <h2>Submitted Applications </h2> 
 
-<%= render :partial => "common/tabs" %>
+<%= render :partial => "mutual/tabs" %>
 
 <% if User.current.admin? %>
   <%= render :partial => "course_application_tables", :locals => { :box => true } %>

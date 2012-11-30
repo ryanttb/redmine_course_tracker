@@ -10,7 +10,7 @@
 
 <% # Provide a tab set for the admin role %>
 <% if(User.current.admin?)%>
-  <%= render :partial => 'common/tabs' %>
+  <%= render :partial => 'mutual/tabs' %>
   <%= render :partial => 'registrant_tables' %>
 <% end %>
 

@@ -1,7 +1,7 @@
 <% flash[:notice] %>
 <h2><%=h CourseTracker.find(params[:course_tracker_id]).title %>: Registrant: <em><%=h "#{@registrant.last_name},#{@registrant.first_name}"%></em></h2>
 
-<%= render :partial => "common/tabs" %>
+<%= render :partial => "mutual/tabs" %>
 <%= render :partial => "form" %>
 
 <br />

@@ -58,7 +58,7 @@ function toggle2() {
 	  <%= button_to "Filter Course Applications By Application Fields", filter_courses_path(:course_id => @course.id, :course_tracker_id => params[:course_tracker_id]) %>
 	  </p>
 	  <p>
-	  <%= button_to "Filter Course Applications by Status", filter_by_status_courses_path(:course_id => @course.id, :course_tracker_id => params[:course_tracker_id]) %>
+	  <%= button_to "Filter Course Applications by Status/TF", filter_by_status_courses_path(:course_id => @course.id, :course_tracker_id => params[:course_tracker_id]) %>
 	  </p>
   <% end %>
   <% form_tag({:controller => 'courses', :action => 'zip_some'}, :id => 'registrant_form') do %>
@@ -67,7 +67,7 @@ function toggle2() {
   <%= render :partial => "course_applications/course_application_tables", :locals => { :box => true } %>
     <p></p>
 	<% unless @course_applications.length == 0 %>
-	  <h3>Bulk Change Application Status</h3>
+	  <h3>Bulk Change Application Fields</h3>
       <p>
 	  <%= label_tag 'course_materials', 'Select Applications from above to Bulk Change Status'%><br />
 	  <br />
@@ -77,9 +77,12 @@ function toggle2() {
       <%= label_tag(:acceptance_status, "Acceptance Status") %><br />
       <%= select_tag(:acceptance_status, options_for_select(CourseApplication::ACCEPTANCE_STATUS)) %>
 	  <br />
+      <%= label_tag(:user_id, "Assign TF") %><br />
+      <%= select_tag(:user_id, options_for_select(@course.tf_list)) %>
+	  <br />
 	  <%= hidden_field_tag "course", @course.id %>
 	  <br />
-	  <%= submit_tag 'Bulk Change Status' %>
+	  <%= submit_tag 'Bulk Change' %>
 	
 	  <p></p>
       

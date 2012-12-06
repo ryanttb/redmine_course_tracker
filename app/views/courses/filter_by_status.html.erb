@@ -6,7 +6,7 @@
 
 <%= render :partial => "mutual/tabs" %>
 
-<h3>Filter Course Applications by Status</h3>
+<h3>Filter Course Applications by Status or TF</h3>
 <p>The filter will be applied to all applications that match <strong>any</strong> of the options you choose.</p>
 
 <% form_tag({:controller => 'courses', :action => 'filter_by_status'}) do %>
@@ -17,10 +17,14 @@
     <%= select_tag(:review_status, options_for_select(CourseApplication::REVIEW_STATUS)) %>
   </p>
   <p>
-    <%= label_tag(:acceptance_status, "Offer Status") %><br />
+    <%= label_tag(:acceptance_status, "Acceptance Status") %><br />
     <%= select_tag(:acceptance_status, options_for_select(CourseApplication::ACCEPTANCE_STATUS)) %>
   </p>
-  <%= submit_tag "Filter by Status" -%>
+  <p>
+    <%= label_tag(:user_id, "TF") %><br />
+    <%= select_tag(:user_id, options_for_select(@course.tf_list)) %>
+  </p>
+  <%= submit_tag "Filter" -%>
 <% end %>
 
 <% unless @course_applications.nil? || @course_applications.empty? %>
@@ -50,9 +54,9 @@
 		  <% @columns.each do |column| %>
 		    <th style="text-align:left;"><%= column %></th>
 		  <% end %>
-		  <th style="text-align:left;">Submission Status</th>
+		  <th style="text-align:left;">TF</th>
 		  <th style="text-align:left;">Review Status</th>
-		  <th style="text-align:left;">Offer Status</th>
+		  <th style="text-align:left;">Acceptance Status</th>
 	    </tr>	
 	  </thead>
 	  <tbody>
@@ -71,7 +75,7 @@
 		      <% end %>
 			<% end %>
 		  <% end %>
-		  <td><%= ja.submission_status %></td>
+		  <td><%= ja.find_tf %></td>
 		  <td><%= ja.review_status %></td>
 		  <td><%= ja.acceptance_status %></td>
 		</tr>

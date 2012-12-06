@@ -15,6 +15,7 @@
 		  <%= sort_header_tag('created_at', :caption => 'Application Deadline') %>
 		  <%= sort_header_tag('review_status', :caption => 'Review Status') %>
 		  <%= sort_header_tag('acceptance_status', :caption => 'Acceptance Status') %>
+		  <%= sort_header_tag('user_id', :caption => 'Assigned TF') %>
 		  <th style="width:5%; text-align:left;">Admin Notes</th>
 		  <th style="width:5%; text-align:left;"></th>
 		  <th style="width:5%; text-align:left;"></th>
@@ -66,6 +67,7 @@
 		  <td style="width:10%"><%= ca.course.submission_date.month %>/<%= ca.course.submission_date.day %>/<%= ca.course.submission_date.year %> <%= ca.course.submission_date.strftime("%I:%M %p") %></td>
 		  <td style="width:10%"><%= ca.review_status %></td>
 		  <td style="width:10%"><%= ca.acceptance_status %></td>
+		  <td style="width:10%"><%= ca.find_tf %></td>
  		  <td style="width:5%"><%= ca.notes.nil? || ca.notes.blank? ? 'No' : 'Yes' %></td>
 		  <td style="width:5%"><%= link_to 'View', course_application_url(ca.id, :course_tracker_id => ca.course_tracker_id), :class => 'icon icon-view' %></td>
 		  <td style="width:5%"><%= link_to 'Add Notes', edit_course_application_url(ca.id, :course_tracker_id => ca.course_tracker_id), :class => 'icon icon-edit' %></td>

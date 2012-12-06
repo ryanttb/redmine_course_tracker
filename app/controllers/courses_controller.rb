@@ -321,15 +321,15 @@ class CoursesController < ApplicationController
   end
   
   def zip_some
-    if params[:commit] == "Bulk Change Status"
+    if params[:commit] == "Bulk Change"
       unless params[:registrants_to_zip].nil?
         applications = Array.new
         params[:registrants_to_zip].each do |ja|
           applications << CourseApplication.find(ja)
         end
         applications.each do |app|
-          if !params[:submission_status].blank?
-            app.submission_status = params[:submission_status]
+          if !params[:user_id].blank?
+            app.user_id = params[:user_id]
           end  
           if !params[:review_status].blank?
             app.review_status = params[:review_status]
@@ -459,8 +459,6 @@ class CoursesController < ApplicationController
       end
     end  
   end  
-  
-  
   
   def register
     redirect_to(home_url) && return unless Setting.self_registration? || session[:auth_source_registration]
@@ -823,8 +821,8 @@ class CoursesController < ApplicationController
   	end
   	@columns = @registrant_fields + @custom
   	@course_applications = []
-  	unless params[:submission_status].blank?
-  	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :submission_status => params[:submission_status]})
+  	unless params[:user_id].blank?
+  	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :user_id => params[:user_id]})
   	end
   	unless params[:review_status].blank?
   	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :review_status => params[:review_status]})

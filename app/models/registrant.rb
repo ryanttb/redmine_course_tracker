@@ -25,7 +25,7 @@ class Registrant < ActiveRecord::Base
   # FIXME Validations that fail are coming up with a 'translation missing: en' error
   validates_presence_of :first_name, :last_name, :email
   validates_length_of :phone, :maximum => 30
-  validates_uniqueness_of :email
+  #validates_uniqueness_of :email
 
   # constants
   # TODO convert these values into variables that can be set from a settings page within Redmine

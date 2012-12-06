@@ -5,6 +5,7 @@ class CourseApplication < ActiveRecord::Base
   #belongs_to :registrant
   belongs_to :course
   belongs_to :registrant
+  belongs_to :user
 
   has_many :course_application_referrals
   has_many :course_application_materials
@@ -31,5 +32,13 @@ class CourseApplication < ActiveRecord::Base
   def available_custom_fields
     self.course.all_course_app_custom_fields || []
   end 
+  
+  def find_tf
+    unless self.user_id.nil?
+      User.find(self.user_id).login
+    else
+      "none"
+    end  
+  end  
   
 end

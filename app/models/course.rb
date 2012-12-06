@@ -45,6 +45,16 @@ class Course < ActiveRecord::Base
   
   def display_deadline
     return "#{(self.submission_date.to_date-30).strftime('%m/%d/%Y')} #{self.submission_date.strftime('%I:%M %p')} ET"
-  end    
+  end 
+  
+  def tf_list
+    users = Array.new
+    User.all.each do |u| 
+      unless u.login.empty?
+        users << [u.login, u.id]
+      end  
+    end  
+    users.insert(0, "")
+  end     
 
 end

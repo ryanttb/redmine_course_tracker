@@ -16,6 +16,7 @@ class CourseApplicationsController < ApplicationController
                 'id' => "#{CourseApplication.table_name}.id",
                 'review_status' => "#{CourseApplication.table_name}.review_status",
                 'acceptance_status' => "#{CourseApplication.table_name}.acceptance_status",
+                'user_id' => "#{CourseApplication.table_name}.user_id",
                 'created_at' => "#{CourseApplication.table_name}.created_at"
     
     if(User.current.admin?)
@@ -254,19 +255,19 @@ class CourseApplicationsController < ApplicationController
   def destroy
     # create a course_application in the context of its parent registrant
     @course_application = CourseApplication.find(params[:id])
+    @course = @course_application.course
     @registrant = Registrant.find(@course_application.registrant_id)
 	unless User.current.admin? || @registrant.email == User.current.mail
 	  flash[:error] = "You are not authorized to view this section."
 		redirect_to('/') and return
 	end
     @course_tracker = CourseTracker.find(@course_application.course_tracker_id)
-    
 
     # destroy the course_application, and indicate a message to the user upon success/failure
     @course_application.destroy ? flash[:notice] = "#{@registrant.first_name} #{@registrant.last_name}\'s record has been deleted." : flash[:error] = "Error: #{@registrant.first_name} #{@registrant.last_name}\'s record could not be deleted."
     
     respond_to do |format|
-      format.html { redirect_to(course_applications_url(:course_tracker_id => @course_tracker.id, :registrant_id => @registrant.id)) }
+      format.html { redirect_to(course_url(@course, :course_tracker_id => @course_tracker.id, :registrant_id => @registrant.id)) }
     end
   end
   

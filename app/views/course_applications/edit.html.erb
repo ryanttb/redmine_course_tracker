@@ -12,9 +12,19 @@ document.observe("dom:loaded", function() {
 <h2><%=h CourseTracker.find(@course_application.course_tracker_id).title %>: <%=h Course.find(@course_application.course_id).title %> </h2>
 
 <%= render :partial => "mutual/tabs" %>
-<span class="required">*</span> Required Fields
-<%= render :partial => 'registrant_info', :locals => { :registrant => @registrant, :course_tracker_id => params[:course_tracker_id] } %>
-<br /><br />
+
+  <% if(User.current.admin? || @course.is_manager?) %>
+    <p><%= render :partial => 'registrant_info', :locals => { :registrant => @registrant, :course_tracker_id => params[:course_tracker_id] } %></p>
+	<h3>Additional Information</h3>
+    <% @course_application.custom_values.each do |custom_value| %>
+	  <% if !custom_value.value.blank? %>
+	    <p><%= custom_value.custom_field.name%>: <%=h show_value(custom_value) %></p>
+	  <% end %>
+    <% end -%>
+  <% else %>
+    <p><%= render :partial => 'list_course_custom_fields', :locals => { :course => @course, :course_application => @course_application } %></p>
+  <% end %>
+
 <% form_for(@course_application, :html => {:multipart => true}) do |f| %>
   <%= f.error_messages %>
   <%= f.hidden_field(:course_tracker_id, :value => @course_tracker.id ) %>
@@ -31,22 +41,15 @@ document.observe("dom:loaded", function() {
       <%= f.label(:acceptance_status, "Acceptance Status") %><br />
       <%= f.select(:acceptance_status, CourseApplication::ACCEPTANCE_STATUS) %>
     </p>
+	<p>
+      <%= f.label(:user_id, "Assign TF") %><br />
+      <%= f.select(:user_id, @course.tf_list) %>
+    </p>
 	<h3>Admin Notes</h3>
 	<p>
       <%= f.label(:notes) %><br />
       <%= f.text_area(:notes) %>
     </p>
-  <% end %>
-
-  <% if(User.current.admin? || @course.is_manager?) %>
-	<h3>Additional Information</h3>
-    <% @course_application.custom_values.each do |custom_value| %>
-	  <% if !custom_value.value.blank? %>
-	    <p><%= custom_value.custom_field.name%>: <%=h show_value(custom_value) %></p>
-	  <% end %>
-    <% end -%>
-  <% else %>
-    <p><%= render :partial => 'list_course_custom_fields', :locals => { :course => @course, :course_application => @course_application } %></p>
   <% end %>
 
   <br />

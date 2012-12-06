@@ -48,13 +48,13 @@ class Course < ActiveRecord::Base
   end 
   
   def tf_list
-    users = Array.new
+    tfs = Array.new
     User.all.each do |u| 
-      unless u.login.empty?
-        users << [u.login, u.id]
+      if self.is_manager?(u) && !u.login.empty?
+        tfs << [u.login, u.id]
       end  
     end  
-    users.insert(0, "")
+    tfs.insert(0, "")
   end     
 
 end

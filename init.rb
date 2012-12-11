@@ -6,7 +6,7 @@ require 'dispatcher'
 
 Dispatcher.to_prepare :redmine_course_tracker do
   require_dependency 'custom_fields_helper'
-  CustomFieldsHelper.send(:include, CustomFieldsHelperPatch) unless CustomFieldsHelper.included_modules.include?(CustomFieldsHelperPatch)
+  CustomFieldsHelper.send(:include, CustomFieldsHelperCoursePatch) unless CustomFieldsHelper.included_modules.include?(CustomFieldsHelperCoursePatch)
   
   #overriding the 30 character limit on the name attribute for custom fields
   CustomField.class_eval{

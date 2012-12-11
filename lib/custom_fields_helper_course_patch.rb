@@ -13,7 +13,7 @@ module CustomFieldsHelperCoursePatch
       # Adds a course application tab to the user administration page
       def custom_fields_tabs_with_course_application_tab
         tabs = custom_fields_tabs_without_course_application_tab
-        tabs << {:name => 'CourseApplicationCustomField', :partial => 'custom_fields/index', :label => 'Course Applications'}
+        tabs << {:name => 'CourseApplicationCustomField', :partial => 'custom_fields/index', :label => :label_course_application_plural}
         return tabs
       end
     end

@@ -59,7 +59,7 @@ function toggle2() {
 	  </p>
 	  <p>
 	  <%= button_to "Filter Course Applications by Status/TF", filter_by_status_courses_path(:course_id => @course.id, :course_tracker_id => params[:course_tracker_id]) %>
-	  </p>
+	  </p>	
   <% end %>
   <% form_tag({:controller => 'courses', :action => 'zip_some'}, :id => 'registrant_form') do %>
   <!-- render Course Applications partial -->
@@ -78,7 +78,7 @@ function toggle2() {
       <%= select_tag(:acceptance_status, options_for_select(CourseApplication::ACCEPTANCE_STATUS)) %>
 	  <br />
       <%= label_tag(:user_id, "Assign TF") %><br />
-      <%= select_tag(:user_id, options_for_select(@course.tf_list)) %>
+      <%= select_tag(:user_id, options_for_select(@course.tf_select)) %>
 	  <br />
 	  <%= hidden_field_tag "course", @course.id %>
 	  <br />

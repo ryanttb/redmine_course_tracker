@@ -41,4 +41,18 @@ class CourseApplication < ActiveRecord::Base
     end  
   end  
   
+  def assign_tf
+    #tfs = self.course.tf_list.cycle
+    #apps = Array.new(5){|i| "Application #{(i+1).to_s}"}
+    #apps.each{|app| puts "Do something with #{app} and #{tfs.next}."}
+    
+    tfs = self.course.tf_list
+    tfs_hash = Hash.new
+    tfs.each do |tf|
+      tf_apps = CourseApplication.find(:all, :conditions => {:user_id => tf.id})
+      tfs_hash[tf] = tf_apps.length
+    end
+    self.user_id = tfs_hash.select {|k,v| v == tfs_hash.values.min}.first[0].id
+  end  
+  
 end

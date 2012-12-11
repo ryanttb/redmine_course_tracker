@@ -22,7 +22,7 @@
   </p>
   <p>
     <%= label_tag(:user_id, "TF") %><br />
-    <%= select_tag(:user_id, options_for_select(@course.tf_list)) %>
+    <%= select_tag(:user_id, options_for_select(@course.tf_select)) %>
   </p>
   <%= submit_tag "Filter" -%>
 <% end %>

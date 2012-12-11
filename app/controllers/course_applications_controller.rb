@@ -115,6 +115,9 @@ class CourseApplicationsController < ApplicationController
       error_files = materials  
     end
     
+    #Automatically assign the TF
+    @course_application.assign_tf
+    
     respond_to do |format|
       if error_files.empty?
         flash.now[:error] = nil

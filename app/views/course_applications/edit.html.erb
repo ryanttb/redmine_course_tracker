@@ -43,7 +43,7 @@ document.observe("dom:loaded", function() {
     </p>
 	<p>
       <%= f.label(:user_id, "Assign TF") %><br />
-      <%= f.select(:user_id, @course.tf_list) %>
+      <%= f.select(:user_id, @course.tf_select) %>
     </p>
 	<h3>Admin Notes</h3>
 	<p>

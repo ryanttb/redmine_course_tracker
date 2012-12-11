@@ -47,14 +47,25 @@ class Course < ActiveRecord::Base
     return "#{(self.submission_date.to_date-30).strftime('%m/%d/%Y')} #{self.submission_date.strftime('%I:%M %p')} ET"
   end 
   
+  def tf_select
+    tfs = Array.new
+    User.all.each do |u| 
+      if self.is_manager?(u)
+        tfs << [u.login, u.id]
+      end  
+    end 
+    tfs.insert(0, "")
+    return tfs
+  end
+  
   def tf_list
     tfs = Array.new
     User.all.each do |u| 
-      if self.is_manager?(u) && !u.login.empty?
-        tfs << [u.login, u.id]
+      if self.is_manager?(u)
+        tfs << u
       end  
-    end  
-    tfs.insert(0, "")
+    end 
+    return tfs
   end     
 
 end

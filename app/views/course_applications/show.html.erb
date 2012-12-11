@@ -8,6 +8,7 @@
 <% if (@course_application.course.submission_date > DateTime.now && User.current.mail == @registrant.email) %>
   <%= link_to 'Edit Application', edit_course_application_url(@course_application.id, :course_tracker_id => params[:course_tracker_id]), :class => 'icon icon-edit' %><br /><br />
 <% elsif User.current.admin? || @course_application.course.is_manager? %>
+  Application TF: <%= @course_application.find_tf %><br /><br />
   <%= link_to 'Add Notes/Comments', edit_course_application_url(@course_application.id, :course_tracker_id => params[:course_tracker_id]), :class => 'icon icon-edit' %><br /><br />
 <% end %>
 Course Title: <%= link_to Course.find(@course_application.course_id).title, course_path(@course_application.course_id, :course_tracker_id => @course_application.course_tracker_id) %><br />
@@ -21,8 +22,8 @@ Course Title: <%= link_to Course.find(@course_application.course_id).title, cour
 	<% end %>
   <% end -%>
 
-<h3>Course Application Attachments</h3>
-<% unless @course_application_materials.nil? || @course_application_materials.blank? %>
+<% unless @course_application_materials.nil? || @course_application_materials.empty? %>
+  <h3>Course Application Attachments</h3>
   <% @course_application_materials.each do |cam| %>
     <%= link_to_attachments cam %><br />
   <% end %>  

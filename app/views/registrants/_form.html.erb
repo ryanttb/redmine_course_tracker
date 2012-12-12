@@ -27,6 +27,11 @@
   </p>
 
   <p>
-    <%= f.submit('Save') %>
+	<%= f.label(:dob, "Birthday") %><span class="required">*</span><br />	
+	<%= select_date(Date.today, :order => [:month, :day, :year], :start_year => Time.now.year, :end_year => 1900) %>
+  </p>	
+
+  <p>
+    <%= f.submit('Continue to Step 2') %>
   </p>
 <% end %>

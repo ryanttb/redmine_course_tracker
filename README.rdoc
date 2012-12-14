@@ -9,3 +9,11 @@ This plugin is open source and released under the terms of the GNU General Publi
 = Copyright
 
 2010 The President and Fellows of Harvard College
+
+= Installation and Set-up
+
+* Note: this assumes you already have an instance of Redmine running
+* Location of the Course Tracker plugin is: https://github.com/apatel/redmine_course_tracker
+* Follow the Redmine plugin install instructions found here: http://www.redmine.org/projects/redmine/wiki/Plugins
+* Logged in as an Admin, go to Administration -> Roles and Permissions -> click on Anonymous -> check off View course trackers and View courses under Course tracker. Do the same for the Manager role.
+* When creating a new project (or editing an existing one), be sure to check off Course tracker under Modules to activate the plugin for that project

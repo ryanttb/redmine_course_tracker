@@ -40,7 +40,8 @@ class Course < ActiveRecord::Base
   end
   
   def is_manager?(usr=User.current)
-    usr.member_of?(self.course_tracker.project)
+    usr.roles_for_project(self.course_tracker.project).include?(Role.find(:first, :conditions => {:name => "Manager"}))
+    #usr.member_of?(self.course_tracker.project)
   end
   
   def display_deadline

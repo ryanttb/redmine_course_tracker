@@ -5,7 +5,7 @@ require 'tempfile'
 
 class CoursesController < ApplicationController
   unloadable
-  before_filter :require_admin, :except => [:index, :show, :register, :filter, :filter_by_status, :export_to_csv, :zip_some, :zip_all, :zip_filtered, :zip_filtered_single, :export_filtered_to_csv]
+  before_filter :require_admin, :except => [:index, :show, :register, :filter, :filter_by_status, :export_to_csv, :zip_some, :zip_all, :zip_filtered, :zip_filtered_single, :export_filtered_to_csv, :show_all]
   
   helper :attachments
   include AttachmentsHelper
@@ -42,7 +42,37 @@ class CoursesController < ApplicationController
                 'review_status' => "#{CourseApplication.table_name}.review_status",
                 'acceptance_status' => "#{CourseApplication.table_name}.acceptance_status",
                 'created_at' => "#{CourseApplication.table_name}.created_at"
+                
+    if User.current.admin?
+      @course_applications = @course.course_applications.find(:all, :order => sort_clause)
+    elsif User.current.member_of?(@course_tracker.project)
+      @course_applications = @course.course_applications.find(:all, :conditions => {:user_id => User.current.id}, :order => sort_clause)  
+      @course_applications_all = @course.course_applications.find(:all, :order => sort_clause)
+    end
     
+    @course_attachments = @course.course_attachments.build
+    course_attachments = @course.course_attachments.find :first, :include => [:attachments]
+    @course_attachment = course_attachments
+    
+    respond_to do |format|
+      format.html #show.html.erb
+    end
+  end
+  
+  def show_all
+    @course = Course.find(params[:id])
+    @course_tracker = @course.course_tracker
+    
+    session[:auth_source_registration] = nil
+    @user = User.new(:language => Setting.default_language)
+    
+    sort_init 'created_at', 'desc'
+    sort_update 'last_name' => "#{Registrant.table_name}.last_name",
+                'id' => "#{CourseApplication.table_name}.id",
+                'review_status' => "#{CourseApplication.table_name}.review_status",
+                'acceptance_status' => "#{CourseApplication.table_name}.acceptance_status",
+                'created_at' => "#{CourseApplication.table_name}.created_at"
+                
     @course_applications = @course.course_applications.find(:all, :order => sort_clause)
     
     @course_attachments = @course.course_attachments.build

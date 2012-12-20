@@ -23,7 +23,7 @@ class Registrant < ActiveRecord::Base
 
   # validation
   # FIXME Validations that fail are coming up with a 'translation missing: en' error
-  validates_presence_of :first_name, :last_name, :email
+  validates_presence_of :first_name, :last_name, :email, :dob
   validates_length_of :phone, :maximum => 30
   #validates_uniqueness_of :email
 

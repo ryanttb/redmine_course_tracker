@@ -48,14 +48,14 @@
           <td><%= link_to "#{course.title}", course_url(course.id, :course_tracker_id => params[:course_tracker_id]) %></td>
           <td><%=h course.category %></td>
           <td><%= textilizable course.short_desc %></td>
-		  <td><%=h course.display_deadline %> ET</td>
+		  <td><%=h course.submission_date.month %>/<%=h course.submission_date.day %>/<%=h course.submission_date.year %> <%= course.submission_date.strftime("%I:%M %p") %> ET</td>
           <td></td>
         <% else %>
           <!-- Anonymous scope -->
           <td><%= link_to "#{course.title}", course_url(course.id, :course_tracker_id => params[:course_tracker_id]) %></a></td>
           <td><%=h course.category %></a></td>
           <td><%= textilizable course.short_desc %></td>
-		  <td><%=h course.display_deadline %></td>
+		  <td><%=h course.submission_date.month %>/<%=h course.submission_date.day %>/<%=h course.submission_date.year %> <%= course.submission_date.strftime("%I:%M %p") %> ET</td>
         <% end %>
       <% end %>
     </tr>

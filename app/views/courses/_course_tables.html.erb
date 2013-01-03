@@ -42,7 +42,7 @@
           :method => :delete,
           :class => 'icon icon-del' %>
         </td>
-      <% elsif course.status != 'inactive' %> 
+      <% elsif course.status != 'Inactive' %> 
         <% if User.current.logged? %>
           <!-- Registrant scope -->
           <td><%= link_to "#{course.title}", course_url(course.id, :course_tracker_id => params[:course_tracker_id]) %></td>

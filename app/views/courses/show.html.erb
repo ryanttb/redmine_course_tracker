@@ -117,7 +117,7 @@ function toggle2() {
 
 <% else %>
   <span class="access-account">
-	  <% if @course.submission_date < DateTime.now || @course.status == 'inactive' %>
+	  <% if @course.submission_date < DateTime.now || @course.status == 'Inactive' %>
 	  Application Deadline Has Passed	
   <% else %>
       <%= link_to "Apply to this course", new_registrant_url(:course_tracker_id => @course_tracker.id, :course_id => @course.id) %>	

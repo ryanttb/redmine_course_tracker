@@ -881,7 +881,7 @@ class CoursesController < ApplicationController
   		  @custom << custom_field.name
   		end
   	end
-  	@columns = @registrant_fields + @custom + ['submission_status', 'review_status', 'acceptance_status']
+  	@columns = @registrant_fields + @custom + ['review_status', 'acceptance_status']
     
     csv_string = FasterCSV.generate do |csv| 
       # header row 
@@ -900,7 +900,6 @@ class CoursesController < ApplicationController
             end  
           end
         end
-        row << ja.submission_status
         row << ja.review_status
         row << ja.acceptance_status  
         csv << row

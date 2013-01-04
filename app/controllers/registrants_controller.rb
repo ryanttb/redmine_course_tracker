@@ -22,7 +22,6 @@ class RegistrantsController < ApplicationController
     sort_init 'created_at', 'desc'
     sort_update 'last_name' => "#{Registrant.table_name}.last_name",
                 'id' => "#{CourseApplication.table_name}.id",
-                'submission_status' => "#{CourseApplication.table_name}.submission_status",
                 'acceptance_status' => "#{CourseApplication.table_name}.acceptance_status",
                 'created_at' => "#{CourseApplication.table_name}.created_at"
                 

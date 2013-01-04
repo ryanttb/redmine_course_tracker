@@ -871,7 +871,7 @@ class CoursesController < ApplicationController
   	end
   	@course_applications = CourseApplication.find(:all, :conditions => ["id in (?)", params[:course_app_ids]])
   	
-    @file_name = @course.title.gsub(/ /, '-')
+    @file_name = @course.title.gsub(/ /, '-').gsub(/,/, '-')
     
     @course_application_custom_fields = @course.all_course_app_custom_fields
     @registrant_fields = Registrant.column_names - ["id", "created_at", "updated_at"]
@@ -909,7 +909,7 @@ class CoursesController < ApplicationController
     # send it to the browser
     send_data csv_string, 
             :type => 'text/html; charset=iso-8859-1; header=present', 
-            :disposition => "attachment; filename=#{@file_name}-registrant-status.csv"
+            :disposition => 'attachment; filename="#{@file_name}-registrant-status.csv"'
   end  
   
 end

@@ -43,11 +43,15 @@ class CoursesController < ApplicationController
                 'acceptance_status' => "#{CourseApplication.table_name}.acceptance_status",
                 'created_at' => "#{CourseApplication.table_name}.created_at"
                 
+    @course_count = @course.course_applications.count
+    @per_page = 5
+    @course_pages = Paginator.new self, @course_count, @per_page, params[:page]            
+    
     if User.current.admin?
-      @course_applications = @course.course_applications.find(:all, :order => sort_clause)
+      @course_applications = @course.course_applications.find(:all, :order => sort_clause, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
     elsif User.current.member_of?(@course_tracker.project)
-      @course_applications = @course.course_applications.find(:all, :conditions => {:user_id => User.current.id}, :order => sort_clause)  
-      @course_applications_all = @course.course_applications.find(:all, :order => sort_clause)
+      @course_applications = @course.course_applications.find(:all, :conditions => {:user_id => User.current.id}, :order => sort_clause, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)  
+      @course_applications_all = @course.course_applications.find(:all, :order => sort_clause, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
     end
     
     @course_attachments = @course.course_attachments.build
@@ -73,7 +77,11 @@ class CoursesController < ApplicationController
                 'acceptance_status' => "#{CourseApplication.table_name}.acceptance_status",
                 'created_at' => "#{CourseApplication.table_name}.created_at"
                 
-    @course_applications = @course.course_applications.find(:all, :order => sort_clause)
+    @course_count = @course.course_applications.count
+    @per_page = 5
+    @course_pages = Paginator.new self, @course_count, @per_page, params[:page]            
+    
+    @course_applications = @course.course_applications.find(:all, :order => sort_clause, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
     
     @course_attachments = @course.course_attachments.build
     course_attachments = @course.course_attachments.find :first, :include => [:attachments]

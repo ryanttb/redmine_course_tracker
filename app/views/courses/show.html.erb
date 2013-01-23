@@ -65,7 +65,8 @@ function toggle2() {
   <!-- render Course Applications partial -->
   <h3>Submitted Applications - Total <%= @course_applications.length %></h3>
   <%= render :partial => "course_applications/course_application_tables", :locals => { :box => true } %>
-
+  <p class="pagination"><%= pagination_links_full @course_pages, @course_count %></p>
+  
   <% if @course.is_manager? %>
     <%= link_to "View All Applications", show_all_courses_path(:id => @course.id, :course_tracker_id => params[:course_tracker_id]) %> | 
     <%= link_to "View My Applications", course_path(@course.id, :course_tracker_id => params[:course_tracker_id]) %>

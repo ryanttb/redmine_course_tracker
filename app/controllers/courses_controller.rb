@@ -44,7 +44,7 @@ class CoursesController < ApplicationController
                 'created_at' => "#{CourseApplication.table_name}.created_at"
                 
     @course_count = @course.course_applications.count
-    @per_page = 5
+    @per_page = params[:per_page].nil? ? 10 : params[:per_page].to_i
     @course_pages = Paginator.new self, @course_count, @per_page, params[:page]            
     
     if User.current.admin?
@@ -57,6 +57,9 @@ class CoursesController < ApplicationController
     @course_attachments = @course.course_attachments.build
     course_attachments = @course.course_attachments.find :first, :include => [:attachments]
     @course_attachment = course_attachments
+    
+    #for large CSV exports
+    @course_app_slices = @course.course_applications.each_slice(1000).to_a.length
     
     respond_to do |format|
       format.html #show.html.erb
@@ -531,35 +534,36 @@ class CoursesController < ApplicationController
   	end
     @registrants = @course.registrants
     @course_applications = @course.course_applications
-    @file_name = @course.title.gsub(/ /, '-').gsub(/,/, '-')
+    @file_name = @course.title.gsub(/,/, '-').gsub(/'/, '-').gsub(' ', '-').gsub('/', '-')
     
     @course_application_custom_fields = @course.all_course_app_custom_fields
     @registrant_fields = Registrant.column_names - ["id", "created_at", "updated_at"]
+    
     @custom = []
     unless @course_application_custom_fields.empty?
-  		@course_application_custom_fields.each do |custom_field|
-  		  @custom << custom_field.name
-  		end
+  		@course_application_custom_fields.collect{|custom_field| @custom << custom_field.name}
   	end
   	@columns = @registrant_fields + @custom
+    chunk = @course_applications.each_slice(1000).to_a[params[:slice_id].to_i]
     
     csv_string = FasterCSV.generate do |csv| 
       # header row 
       csv << @columns
 
       # data rows 
-      @course_applications.each do |ja|
+      chunk.each do |ja|
         row = []
         @registrant_fields.each do |af|
           row << ja.registrant.send(af)
         end
-        @custom.each do |c| 
-          ja.custom_values.each do |cv|
-            if cv.custom_field.name == c
-              row << show_value(cv)
-            end  
-          end
-        end  
+        @custom.each do |c|
+          value = ja.custom_values.detect{|cv| cv.custom_field.name == c}
+          if show_value(value).blank?
+  		      row << ""  
+  				else
+  				  row << show_value(value)
+  				end 
+        end
         csv << row
       end 
     end 
@@ -567,7 +571,7 @@ class CoursesController < ApplicationController
     # send it to the browser
     send_data csv_string, 
             :type => 'text/html; charset=iso-8859-1; header=present', 
-            :disposition => "attachment; filename=#{@file_name}-registrants.csv"
+            :disposition => "attachment; filename=#{@file_name}-#{params[:slice_id].to_i}-registrants.csv"
   end
   
   def filter
@@ -612,7 +616,11 @@ class CoursesController < ApplicationController
         end  
       end 
       
-      @course_applications = CourseApplication.find(:all, :conditions => ["course_id = ? and id in (?)", params[:course_id], course_app_ids])
+      @course_count = @course.course_applications.count
+      @per_page = 5
+      @course_pages = Paginator.new self, @course_count, @per_page, params[:page]
+      
+      @course_applications = CourseApplication.find(:all, :conditions => ["course_id = ? and id in (?)", params[:course_id], course_app_ids], :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
     end   
   end
   
@@ -859,14 +867,19 @@ class CoursesController < ApplicationController
   	end
   	@columns = @registrant_fields + @custom
   	@course_applications = []
+    
+    @course_count = @course.course_applications.count
+    @per_page = 5
+    @course_pages = Paginator.new self, @course_count, @per_page, params[:page]
+      
   	unless params[:user_id].blank?
-  	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :user_id => params[:user_id]})
+  	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :user_id => params[:user_id]}, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
   	end
   	unless params[:review_status].blank?
-  	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :review_status => params[:review_status]})
+  	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :review_status => params[:review_status]}, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
   	end 
   	unless params[:acceptance_status].blank?
-  	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :acceptance_status => params[:acceptance_status]})
+  	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :acceptance_status => params[:acceptance_status]}, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
   	end 
   	@course_applications.flatten!
   end

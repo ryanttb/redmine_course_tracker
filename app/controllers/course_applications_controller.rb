@@ -56,8 +56,8 @@ class CourseApplicationsController < ApplicationController
   	end
     
     # note these two lines are NOT the same, one is course materials the other is course referrals
-    @course_application_materials = @course_application.course_application_materials.find :all, :include => [:attachments]
-    @course_application_referrals = @course_application.course_application_referrals.find :all, :include => [:attachments]
+    #@course_application_materials = @course_application.course_application_materials.find :all, :include => [:attachments]
+    #@course_application_referrals = @course_application.course_application_referrals.find :all, :include => [:attachments]
     
     respond_to do |format|
       format.html #show.html.erb
@@ -284,7 +284,12 @@ class CourseApplicationsController < ApplicationController
   		redirect_to('/') and return
   	end
     @course_tracker = @course.course_tracker
-    @course_applications = @course.course_applications.find(:all, :order => sort_clause)
+    
+    @course_count = @course.course_applications.count
+    @per_page = 5
+    @course_pages = Paginator.new self, @course_count, @per_page, params[:page]
+    
+    @course_applications = @course.course_applications.find(:all, :order => sort_clause, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
     @course_application_custom_fields = @course.all_course_app_custom_fields
     @registrant_fields = Registrant.column_names - ["id", "created_at", "updated_at"]
     @custom = []

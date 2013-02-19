@@ -44,6 +44,20 @@ function toggle2() {
 <strong>
 <% if User.current.admin? || @course.is_manager? %>
   <% unless @course_applications.length == 0 %>
+  
+  <h3>Course Application Export Options</h3>
+  Due to the quantity of applications, the CSV export has been broken up into managable slices which can then be combined manually.
+	  
+  <% (1..@course_app_slices).each do |i| %>
+  <p>
+  <% form_tag({ :action =>  :export_to_csv }, :html => { :multipart => true })do -%>
+    <%= hidden_field_tag :course_id, @course.id %>
+	<%= hidden_field_tag :slice_id, i-1 %>
+    <%= submit_tag "Export Slice #{i} To CSV" -%>
+  <% end -%>
+  </p>
+  <% end %>
+  
 	  <h3>Course Application Viewing Options</h3>
 	  <p>
 	  <% form_tag({ :action =>  :export_to_csv }, :html => { :multipart => true })do -%>

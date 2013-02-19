@@ -21,40 +21,12 @@ Course Title: <%= link_to Course.find(@course_application.course_id).title, cour
 	  <p><%= custom_value.custom_field.name%>: <%=h show_value(custom_value) %></p>
 	<% end %>
   <% end -%>
-
-<% unless @course_application_materials.nil? || @course_application_materials.empty? %>
-  <h3>Course Application Attachments</h3>
-  <% @course_application_materials.each do |cam| %>
-    <%= link_to_attachments cam %><br />
-  <% end %>  
-<% else %>
-  No attachments.
-<% end %>
 <br />
-<% unless @course_application.course.referrer_count == "0" %>
-	<h3>Course Application Referrals</h3>
+
 	<% if User.current.admin?  || @course_application.course.is_manager? %>
-		<% unless @course_application_referrals.nil? || @course_application_referrals.blank? %>
-		  <% @course_application_referrals.each do |car| %>
-		    <p>
-		      Name: <%= car.first_name %> <%= car.last_name %><br />
-		      Email: <%= car.email %><br />
-		      Title: <%= car.title %><br />
-		      Notes: <%= car.notes %><br />
-		      <%= link_to_attachments car %>
-		    </p>
-		  <% end %>
-		<% else %>
-		  No referrals.
-		<% end %>
-		</p>
-		<br />
-	
 		<h3>Admin Notes</h3>
 	  	<p><%= @course_application.notes %></p>
-	<% else %>
-	    <p>Referrals Submitted: <%= @course_application.course_application_referrals.all.empty? ? 0 : @course_application.course_application_referrals.all.length %></p>
 	<% end %>
-<% end %>
+
 
 <br /><br />

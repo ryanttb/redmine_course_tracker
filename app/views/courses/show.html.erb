@@ -130,15 +130,51 @@ function toggle2() {
   <% end %>	
   </p>
 
-<% else %>
-  <span class="access-account">
-	  <% if @course.submission_date < DateTime.now || @course.status == 'Inactive' %>
-	  Application Deadline Has Passed	
+<% elsif User.current.logged? || @admin_view == true %>
+<span class="access-account">
+  <% @registrant = Registrant.find_by_email(User.current.mail) %>
+  <% unless @registrant.nil? %>
+  
+  	  <% @courses = @registrant.course_applications.collect {|x| x.course_id } %>
+	<% @registrant.course_applications.each do |x| %>
+		<% if x.course_id == @course.id %>
+			<% @this_course = x %>
+		<% end %>	
+	<% end %>
+  
+  	  <!-- if the applicant has already applied to this course, do not show the "Apply" link -->
+	  <% if @this_course.nil? %>
+	    <!-- go to course application -->
+		<%= link_to "Apply to this course", new_course_application_url(:apptracker_id => params[:apptracker_id], :course_id => @course.id, :user_id => User.current.id) %>
+	  <% elsif @this_course.submission_status == "Not Submitted" %>
+		<%= link_to "Apply to this course", edit_course_application_url(@this_course, :apptracker_id => params[:apptracker_id], :course_id => @course.id, :user_id => User.current.id) %>  
+	  <% else %>
+	    You have already submitted an application for this course. To view what you've submitted, please go to the "My Course Applications" tab.
+	  <% end %>	
   <% else %>
-      <%= link_to "Apply to this course", new_registrant_url(:course_tracker_id => @course_tracker.id, :course_id => @course.id) %>	
+    <%= link_to "Apply to this course", new_course_application_url(:apptracker_id => params[:apptracker_id], :course_id => @course.id, :user_id => User.current.id), :class => 'access-account' %>
   <% end %>
-  </span>
+</span>
+<% else %>
+<span class="access-account">
+  <!-- Take anonymous user to registration or login page -->
+  <%= link_to "Log In", signin_url, :class => 'access-account' %> 
+	or 
+  <a id="displayText" href="javascript:toggle();" class="access-account">Register</a> to Apply to This Course
+  <div id ="toggleText" style="display: none">
+	<br />
+	<span class="register_form"><%= render :partial => "register_form" %></span>
+  </div>
+</span>	
 <% end %>
+
+
+
+
+
+
+
+
 </strong>
 	
 <p></p>

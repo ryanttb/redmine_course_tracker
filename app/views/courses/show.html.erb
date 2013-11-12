@@ -145,14 +145,12 @@ function toggle2() {
   	  <!-- if the applicant has already applied to this course, do not show the "Apply" link -->
 	  <% if @this_course.nil? %>
 	    <!-- go to course application -->
-		<%= link_to "Apply to this course", new_course_application_url(:apptracker_id => params[:apptracker_id], :course_id => @course.id, :user_id => User.current.id) %>
-	  <% elsif @this_course.submission_status == "Not Submitted" %>
-		<%= link_to "Apply to this course", edit_course_application_url(@this_course, :apptracker_id => params[:apptracker_id], :course_id => @course.id, :user_id => User.current.id) %>  
+		<%= link_to "Apply to this course", new_course_application_url(:course_tracker_id => params[:course_tracker_id], :course_id => @course.id, :user_id => User.current.id) %>
 	  <% else %>
 	    You have already submitted an application for this course. To view what you've submitted, please go to the "My Course Applications" tab.
 	  <% end %>	
   <% else %>
-    <%= link_to "Apply to this course", new_course_application_url(:apptracker_id => params[:apptracker_id], :course_id => @course.id, :user_id => User.current.id), :class => 'access-account' %>
+    <%= link_to "Apply to this course", new_course_application_url(:course_tracker_id => params[:course_tracker_id], :course_id => @course.id, :user_id => User.current.id), :class => 'access-account' %>
   <% end %>
 </span>
 <% else %>

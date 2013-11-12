@@ -8,17 +8,17 @@
   <h3>General Information</h3>
   <p>
     <%= f.label(:first_name, "First Name") %><span class="required">*</span><br />
-    <%= f.text_field(:first_name) %>
+    <%= f.text_field(:first_name, { :value => User.current.firstname }) %>
   </p>
 
   <p>
     <%= f.label(:last_name, "Last Name") %><span class="required">*</span><br />
-    <%= f.text_field(:last_name) %>
+    <%= f.text_field(:last_name, { :value => User.current.lastname }) %>
   </p>
 
   <p>
     <%= f.label(:email, "Email") %><span class="required">*</span><br />
-    <%= f.text_field(:email) %>
+    <%= f.text_field(:email, { :value => User.current.mail }) %>
   </p>
 
   <p>

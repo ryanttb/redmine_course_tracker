@@ -70,9 +70,14 @@ class CourseApplicationsController < ApplicationController
       flash[:error] = "The deadline has passed for this course."
       redirect_to('/') and return
     end
-    @registrant = Registrant.find(params[:user_id])
+    @registrant = Registrant.find_by_email(User.current.mail)
     @course_tracker = CourseTracker.find(params[:course_tracker_id])
-    @course_application = CourseApplication.new(:course_id => @course, :registrant_id => @registrant.id, :course_tracker_id => @course_tracker.id) 
+
+    if @registrant.nil?
+      redirect_to(new_registrant_url(:course_tracker_id => @course_tracker.id, :course_id => @course.id))
+    else
+      @course_application = CourseApplication.new(:course_id => @course, :registrant_id => @registrant.id, :course_tracker_id => @course_tracker.id) 
+    end  
   end
 
   def edit

@@ -1,0 +1,43 @@
+<table class="list">
+<thead>
+  <tr>
+    <% if(User.current.admin?)%>
+      <!-- Admin Role -->
+      <%= sort_header_tag('first_name', :align => "left") %>
+	  <%= sort_header_tag('last_name', :align => "left") %>
+	  <th style="text-align: left;"># of Applications Assigned</th>
+	  <th style="text-align: left;"># of Applications Accepted</th>
+
+    <% elsif (User.current.logged?)%>
+      <!-- Registrant Role -->
+      <!-- No view for registrants -->
+    <% else %>
+      <!-- Anonymous Role -->
+      <!-- No view for Anonymous -->
+
+    <% end %> 
+  </tr>
+</thead>
+<tbody>
+  <% @tfs.each do |tf| %>
+    <tr>
+      <% if(User.current.admin?)%>
+        <!-- Admin Role -->
+        <td><%= tf.firstname %></td>
+		<td><%= tf.lastname %></td>
+		<td><%= @tfs_hash[tf] %></td>
+		<td><%= @tfs_complete_hash[tf] %></td>
+
+      <% elsif (User.current.logged?)%>
+        <!-- Registrant Role -->
+        <!-- No view for Registrants -->
+
+      <% else %>
+        <!-- Anonymous Role -->
+        <!-- No view for Anonymous -->
+
+      <% end %> 
+    </tr>
+  <% end %>
+</tbody>
+</table>

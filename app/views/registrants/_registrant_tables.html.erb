@@ -3,8 +3,8 @@
   <tr>
     <% if(User.current.admin?)%>
       <!-- Admin Role -->
-      <%= sort_header_tag('first_name') %>
-	  <%= sort_header_tag('last_name') %>
+      <%= sort_header_tag('first_name', :align => "left") %>
+	  <%= sort_header_tag('last_name', :align => "left") %>
       <th></th>
       <th></th>
 

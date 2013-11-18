@@ -22,7 +22,7 @@ class CourseApplication < ActiveRecord::Base
 
   # constants
   # TODO convert these values into variables that can be set from a settings page within Redmine
-  ACCEPTANCE_STATUS = ['Yes', 'High Maybe', 'No'].insert(0, "")
+  ACCEPTANCE_STATUS = ['Yes', 'High Maybe', 'No', "Admit"].insert(0, "")
   REVIEW_STATUS = ['In Process', 'First Rev', 'Second Rev', 'Unreviewed'].insert(0, "")
   
   def validate

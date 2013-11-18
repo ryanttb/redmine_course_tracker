@@ -11,7 +11,11 @@
 <% # Provide a tab set for the admin role %>
 <% if(User.current.admin?)%>
   <%= render :partial => 'mutual/tabs' %>
+  <h3>Registrants</h3>
   <%= render :partial => 'registrant_tables' %>
+  <br/>
+  <h3>Teaching Fellows</h3>
+  <%= render :partial => 'mutual/tf_tables' %>
 <% end %>
 
 

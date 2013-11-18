@@ -53,8 +53,8 @@ document.observe("dom:loaded", function() {
   <% end %>
 
   <br />
-  <h3>Course Application Materials</h3>
-    <% unless @course_application_materials.nil? || @course_application_materials.empty? %>
+  <% unless @course_application_materials.nil? || @course_application_materials.empty? %>
+    <h3>Course Application Materials</h3>
 	  <h4>Existing</h4>
 	  <% @course_application_materials.each do |cam| %>
 	    <%= link_to_attachments cam %><br />

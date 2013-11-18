@@ -12,6 +12,19 @@ class RegistrantsController < ApplicationController
     
     @course_tracker = CourseTracker.find(params[:course_tracker_id])
     @registrants = Registrant.find(:all, :order => sort_clause)
+    @tfs = @course_tracker.tf_list
+    #hash of tf and count of applications assigned
+    @tfs_hash = Hash.new
+    @tfs_complete_hash = Hash.new
+    @tfs.each do |tf|
+      tf_apps_complete = Array.new
+      tf_apps = CourseApplication.find(:all, :conditions => {:user_id => tf.id})
+      @tfs_hash[tf] = tf_apps.length
+      tf_apps.collect{|app| app.acceptance_status == "Admit" ? tf_apps_complete << app : '' }
+      @tfs_complete_hash[tf] = tf_apps_complete.length
+    end
+    p "tf hash"
+    p @tfs_hash
   end
   
   def show 

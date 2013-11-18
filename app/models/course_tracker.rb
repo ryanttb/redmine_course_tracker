@@ -28,5 +28,20 @@ class CourseTracker < ActiveRecord::Base
       raise 'No course tracker to delete.'
     end
   end
+  
+  def is_manager?(usr=User.current)
+    usr.roles_for_project(self.project).include?(Role.find(:first, :conditions => {:name => "Manager"}))
+    #usr.member_of?(self.course_tracker.project)
+  end
+  
+  def tf_list
+    tfs = Array.new
+    User.all.each do |u| 
+      if self.is_manager?(u)
+        tfs << u
+      end  
+    end 
+    return tfs
+  end  
 
 end

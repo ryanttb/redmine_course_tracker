@@ -3,26 +3,26 @@
   <tr>
     <% if(User.current.admin?)%>
       <!-- Admin scope -->
-      <%= sort_header_tag('title') %>
-      <%= sort_header_tag('category') %>
-      <%= sort_header_tag('short_desc', :caption => 'Short Description') %>
-      <%= sort_header_tag('course_status') %>
-	  <%= sort_header_tag('application_deadline') %>
+      <%= sort_header_tag('title', :align => "left") %>
+      <%= sort_header_tag('category', :align => "left") %>
+      <%= sort_header_tag('short_desc', :caption => 'Short Description', :align => "left") %>
+      <%= sort_header_tag('course_status', :align => "left") %>
+	  <%= sort_header_tag('application_deadline', :align => "left") %>
       <th></th>
 	  <th></th>
     <% elsif (User.current.logged?)%>
       <!-- Registrant scope -->
-      <%= sort_header_tag('title') %>
-      <%= sort_header_tag('category') %>
-      <%= sort_header_tag('short_desc') %>
-	  <%= sort_header_tag('application_deadline') %>
+      <%= sort_header_tag('title', :align => "left") %>
+      <%= sort_header_tag('category', :align => "left") %>
+      <%= sort_header_tag('short_desc', :align => "left") %>
+	  <%= sort_header_tag('application_deadline', :align => "left") %>
       <th></th>
     <% else %>
       <!-- Anonymous scope -->
-      <%= sort_header_tag('title') %>
-      <%= sort_header_tag('category') %>
-      <%= sort_header_tag('short_desc') %>
-	  <%= sort_header_tag('application_deadline') %>
+      <%= sort_header_tag('title', :align => "left") %>
+      <%= sort_header_tag('category', :align => "left") %>
+      <%= sort_header_tag('short_desc', :align => "left") %>
+	  <%= sort_header_tag('application_deadline', :align => "left") %>
     <% end %>
   </tr>
 </thead>

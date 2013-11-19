@@ -128,15 +128,15 @@ class CourseApplicationsController < ApplicationController
         flash.now[:error] = nil
         @course_application.update_attributes(params[:course_application])
         if(@course_application.save)
-          #if course application saved then create the course application material
-          course_app_file = Hash.new
-          course_app_file["course_application_id"] = @course_application.id
-          @course_application_material = @course_application.course_application_materials.build(course_app_file)
-          @course_application_material.save
-        
-          attachments = Attachment.attach_files(@course_application_material, params[:attachments])
-          render_attachment_warning_if_needed(@course_application_material)
-      
+          #if course application requires material then create course application material
+          unless @course.application_material_types.nil? || @course.application_material_types.empty?
+            course_app_file = Hash.new
+            course_app_file["course_application_id"] = @course_application.id
+            @course_application_material = @course_application.course_application_materials.build(course_app_file)
+            @course_application_material.save
+            attachments = Attachment.attach_files(@course_application_material, params[:attachments])
+            render_attachment_warning_if_needed(@course_application_material)
+          end
           #Send Notification
           Email.deliver_application_submitted(@course_application) 
           
@@ -194,42 +194,42 @@ class CourseApplicationsController < ApplicationController
     respond_to do |format|
       if(@course_application.update_attributes(params[:course_application]))
         # attach files
-        course_app_file = Hash.new
-        course_app_file["course_application_id"] = @course_application.id
-        if @course_application_materials.nil? || @course_application_materials.empty?
-          @course_application_material = @course_application.course_application_materials.build(course_app_file)
-          @course_application_material.save
-        else  
-          @course_application_material = @course_application.course_application_materials.find :first
-        end  
-        materials = @course_application.course.application_material_types.split(',')
-        unless materials.empty?
-          i = 1
-          materials.each do |amt|
-            unless params[:attachments].nil? || params[:attachments][i.to_s].nil? || params[:attachments][i.to_s]['file'].nil?
-              params[:attachments][i.to_s]['description'] = amt
-            end  
-            i = i + 1
-          end
-          attachments = Attachment.attach_files(@course_application_material, params[:attachments])
-          render_attachment_warning_if_needed(@course_application_material)    
-        
-          @course_application_materials = @course_application.course_application_materials.find :all, :include => [:attachments]
-          uploaded = Array.new
-          @course_application_materials.each do |jam|
-      		  jam.attachments.each do |jam_file|
-      		    uploaded << jam_file.description
-      		  end  
-      	  end
-
-      	  upload_error = false
-      	  materials.each do |material|
-      	    if !uploaded.include?(material)
-      	      upload_error = true
-      	    end  
+        unless @course.application_material_types.nil? || @course.application_material_types.empty?
+          course_app_file = Hash.new
+          course_app_file["course_application_id"] = @course_application.id
+          if @course_application_materials.nil? || @course_application_materials.empty?
+            @course_application_material = @course_application.course_application_materials.build(course_app_file)
+            @course_application_material.save
+          else  
+            @course_application_material = @course_application.course_application_materials.find :first
+          end  
+          materials = @course_application.course.application_material_types.split(',')
+          unless materials.empty?
+            i = 1
+            materials.each do |amt|
+              unless params[:attachments].nil? || params[:attachments][i.to_s].nil? || params[:attachments][i.to_s]['file'].nil?
+                params[:attachments][i.to_s]['description'] = amt
+              end  
+              i = i + 1
+            end
+            attachments = Attachment.attach_files(@course_application_material, params[:attachments])
+            render_attachment_warning_if_needed(@course_application_material)    
+            @course_application_materials = @course_application.course_application_materials.find :all, :include => [:attachments]
+            uploaded = Array.new
+            @course_application_materials.each do |jam|
+      		    jam.attachments.each do |jam_file|
+      		      uploaded << jam_file.description
+      		    end  
+      	    end
+          
+      	    upload_error = false
+      	    materials.each do |material|
+      	      if !uploaded.include?(material)
+      	        upload_error = true
+      	      end  
+      	    end
       	  end
       	end
-      	
       	if upload_error == true
       	  # validation prevented update; redirect to edit form with error messages
       	  flash[:error] = "Please upload all required materials. You will need to re-upload all documents."

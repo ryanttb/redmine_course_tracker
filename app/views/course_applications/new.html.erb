@@ -24,7 +24,7 @@ document.observe("dom:loaded", function() {
   
   <br />
   
-<% unless @course.application_material_types.nil? || @course.application_material_types.empty?%>
+<% unless @course.application_material_types.nil? || @course.application_material_types.empty? %>
   <h3>Course Application Materials</h3>
   <% @course_application.course_application_materials.build() %>	
   

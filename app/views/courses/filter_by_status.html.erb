@@ -40,13 +40,14 @@
 	    <%= submit_tag "Export Filtered Results To CSV" -%>
 	  <% end -%>
 	</p>
-	<p>
-	  <%= button_to 'Zip Materials for Filtered Results Into Single Folder', zip_filtered_single_courses_path(:course_id => @course.id, :course_applications => @course_applications) %>
-	</p>
-	<p>
-	  <%= button_to 'Zip Materials for Filtered Results Into Folders by Registrant', zip_filtered_courses_path(:course_id => @course.id, :course_applications => @course_applications) %>
-	</p>
-	
+	<% unless @course.application_material_types.nil? || @course.application_material_types.empty? %>
+	  <p>
+	    <%= button_to 'Zip Materials for Filtered Results Into Single Folder', zip_filtered_single_courses_path(:course_id => @course.id, :course_applications => @course_applications) %>
+	  </p>
+	  <p>
+	    <%= button_to 'Zip Materials for Filtered Results Into Folders by Registrant', zip_filtered_courses_path(:course_id => @course.id, :course_applications => @course_applications) %>
+	  </p>
+	<% end %>
 	<table class="list">
 	  <thead>
 	    <tr>

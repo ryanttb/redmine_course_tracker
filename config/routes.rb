@@ -2,7 +2,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :course_trackers
   map.resources :registrants
-  map.resources :courses, :collection => {:zip_some => [:get,:post], :zip_all => [:get,:post], :filter => [:get,:post], :filter_by_status => [:get,:post], :zip_filtered => [:get,:post], :zip_filtered_single => [:get,:post], :export_filtered_to_csv => [:get,:post], :show_all => [:get,:post]}
+  map.resources :courses, :collection => {:zip_some => [:get,:post], :zip_all => [:get,:post], :filter => [:get,:post], :filter_by_status => [:get,:post], :zip_filtered => [:get,:post], :zip_filtered_single => [:get,:post], :export_filtered_to_csv => [:get,:post], :export_emails_to_csv => [:get,:post], :show_all => [:get,:post]}
   map.resources :course_applications, :collection => {:view_table => [:get,:post], :new_referral => [:get,:post]}
   map.resources :course_attachments
   map.resources :course_custom_fields

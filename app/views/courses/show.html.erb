@@ -45,27 +45,28 @@ function toggle2() {
 <% if User.current.admin? || @course.is_manager? %>
   <% unless @course_applications.length == 0 %>
   
-  <h3>Course Application Export Options</h3>
-  Due to the quantity of applications, the CSV export has been broken up into managable slices which can then be combined manually.
+    <h3>Export Options</h3>
+    Due to the quantity of applications, the CSV export has been broken up into managable slices which can then be combined manually.
 	  
-  <% (1..@course_app_slices).each do |i| %>
-  <p>
-  <% form_tag({ :action =>  :export_to_csv }, :html => { :multipart => true })do -%>
-    <%= hidden_field_tag :course_id, @course.id %>
-	<%= hidden_field_tag :slice_id, i-1 %>
-    <%= submit_tag "Export Slice #{i} To CSV" -%>
-  <% end -%>
-  </p>
-  <% end %>
+    <% (1..@course_app_slices).each do |i| %>
+      <p>
+      <% form_tag({ :action =>  :export_to_csv }, :html => { :multipart => true })do -%>
+        <%= hidden_field_tag :course_id, @course.id %>
+	    <%= hidden_field_tag :slice_id, i-1 %>
+        <%= submit_tag "Export Slice #{i} To CSV" -%>
+      <% end -%>
+      </p>
+    <% end %>
+	
+    <p>
+    <% form_tag({ :action =>  :export_to_csv }, :html => { :multipart => true })do -%>
+      <%= hidden_field_tag :course_id, @course.id %>
+      <%= submit_tag "Export All Course Applications To CSV" -%>
+    <% end -%>
+    </p>
   
-	  <h3>Course Application Viewing Options</h3>
-	  <p>
-	  <% form_tag({ :action =>  :export_to_csv }, :html => { :multipart => true })do -%>
-	    <%= hidden_field_tag :course_id, @course.id %>
-	    <%= submit_tag "Export All Registrants To CSV" -%>
-	  <% end -%>
-	  </p>
-	  <p>
+    <h3>Viewing Options</h3>
+      <p>
 	  <%= button_to "View All Course Applications As Table", view_table_course_applications_path(:course_id => @course.id, :course_tracker_id => params[:course_tracker_id]) %>
 	  </p>	
 	  <p>
@@ -73,8 +74,17 @@ function toggle2() {
 	  </p>
 	  <p>
 	  <%= button_to "Filter Course Applications by Status/TF", filter_by_status_courses_path(:course_id => @course.id, :course_tracker_id => params[:course_tracker_id]) %>
-	  </p>	
+	  </p>
+	  
+    <h3>Enrollment Options</h3>
+      <p>
+	      <% form_tag({ :action =>  :export_emails_to_csv }, :html => { :multipart => true })do -%>
+	        <%= hidden_field_tag :course_id, @course.id %>
+	        <%= submit_tag "Export CSV of Enrolls' Emails" -%>
+	      <% end -%>
+  	  </p>	 	
   <% end %>
+  
   <% form_tag({:controller => 'courses', :action => 'zip_some'}, :id => 'registrant_form') do %>
   <!-- render Course Applications partial -->
   <h3>Submitted Applications - Total <%= @course_applications.length %></h3>
@@ -105,28 +115,31 @@ function toggle2() {
 	  <%= submit_tag 'Bulk Change' %>
 	
 	  <p></p>
-      
-	  <h3>Zip/Download Submitted Materials</h3>
-      <p>
-	  <%= label_tag 'course_materials', 'Select Applications from above to Download Submitted Materials'%><br />
-	  <br />
-	  <% for material in @course.application_material_types.split(',') %>
-	    <%= check_box_tag "application_material_types[]", material, true %>
-	    <%= material %><br />
+      <% unless @course.application_material_types.nil? || @course.application_material_types.empty? %>  
+	    <h3>Zip/Download Submitted Materials</h3>
+        <p>
+	    <%= label_tag 'course_materials', 'Select Applications from above to Download Submitted Materials'%><br />
+	    <br />
+	    <% for material in @course.application_material_types.split(',') %>
+	      <%= check_box_tag "application_material_types[]", material, true %>
+	      <%= material %><br />
+	    <% end %>
+	    <% unless @course.referrer_count.nil? || @course.referrer_count == "0" %>
+	      <%= check_box_tag "registrant_referral", "referral", true %>
+	      Referral<br />
+	    <% end %>
+	    <%= hidden_field_tag "course", @course.id %>
+	    <br />
+	    <%= submit_tag 'Create zip file of selected materials' %> (batches all materials for all selected candidates into one folder)
 	  <% end %>
-	  <% unless @course.referrer_count.nil? || @course.referrer_count == "0" %>
-	    <%= check_box_tag "registrant_referral", "referral", true %>
-	    Referral<br />
-	  <% end %>
-	  <%= hidden_field_tag "course", @course.id %>
-	  <br />
-	  <%= submit_tag 'Create zip file of selected materials' %> (batches all materials for all selected candidates into one folder)
 	<% end %>
   <% end %>
-  <% unless @course_applications.length == 0 %>
+  <% unless @course.application_material_types.nil? || @course.application_material_types.empty? %> 
+    <% unless @course_applications.length == 0 %>
 	  <p>
 	    <%= button_to "Zip all materials for all candidates into unique folders", zip_all_courses_path(:course => @course.id) %>
 	  </p>
+    <% end %>
   <% end %>	
   </p>
 

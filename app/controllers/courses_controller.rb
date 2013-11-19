@@ -543,7 +543,11 @@ class CoursesController < ApplicationController
     unless @course_application_custom_fields.empty?
   		@course_application_custom_fields.collect{|custom_field| @custom << custom_field.name}
   	end
-  	@columns = @registrant_fields + @custom
+    
+    @application_fields = ["created_at", "review_status", "acceptance_status", "user_id"]
+  	
+    @columns = @registrant_fields + @custom + @application_fields
+    
     chunk = @course_applications.each_slice(1000).to_a[params[:slice_id].to_i]
     
     csv_string = FasterCSV.generate do |csv| 
@@ -564,6 +568,13 @@ class CoursesController < ApplicationController
   				  row << show_value(value)
   				end 
         end
+        @application_fields.each do |af|
+          if af == "user_id"
+            row << ja.find_tf
+          else  
+            row << ja.send(af)
+          end  
+        end
         csv << row
       end 
     end 
@@ -571,8 +582,93 @@ class CoursesController < ApplicationController
     # send it to the browser
     send_data csv_string, 
             :type => 'text/html; charset=iso-8859-1; header=present', 
-            :disposition => "attachment; filename=#{@file_name}-#{params[:slice_id].to_i}-registrants.csv"
+            :disposition => "attachment; filename=#{@file_name}-#{params[:slice_id].to_i}-applications.csv"
   end
+  
+  def export_filtered_to_csv
+    @course = Course.find(params[:course_id])
+    unless User.current.admin? || @course.is_manager?
+      flash[:error] = "You are not authorized to view this section."
+  		redirect_to('/') and return
+  	end
+  	@course_applications = CourseApplication.find(:all, :conditions => ["id in (?)", params[:course_app_ids]])
+  	
+    @file_name = @course.title.gsub(/ /, '-').gsub(/,/, '-')
+    
+    @course_application_custom_fields = @course.all_course_app_custom_fields
+    @registrant_fields = Registrant.column_names - ["id", "created_at", "updated_at"]
+    @custom = []
+    unless @course_application_custom_fields.empty?
+  		@course_application_custom_fields.each do |custom_field|
+  		  @custom << custom_field.name
+  		end
+  	end
+    
+    @application_fields = ["created_at", "review_status", "acceptance_status", "user_id"]
+  	
+    @columns = @registrant_fields + @custom + @application_fields
+    
+    csv_string = FasterCSV.generate do |csv| 
+      # header row 
+      csv << @columns
+
+      # data rows 
+      @course_applications.each do |ja|
+        row = []
+        @registrant_fields.each do |af|
+          row << ja.registrant.send(af)
+        end
+        @custom.each do |c| 
+          ja.custom_values.each do |cv|
+            if cv.custom_field.name == c
+              row << show_value(cv)
+            end  
+          end
+        end
+        @application_fields.each do |af|
+          if af == "user_id"
+            row << ja.find_tf
+          else  
+            row << ja.send(af)
+          end  
+        end
+        csv << row
+      end 
+    end 
+
+    # send it to the browser
+    send_data csv_string, 
+            :type => 'text/html; charset=iso-8859-1; header=present', 
+            :disposition => "attachment; filename=#{@file_name}-application-filter-status.csv"
+  end 
+  
+  def export_emails_to_csv
+    @course = Course.find(params[:course_id])
+    unless User.current.admin? || @course.is_manager?
+      flash[:error] = "You are not authorized to view this section."
+  		redirect_to('/') and return
+  	end
+    @course_applications = @course.course_applications
+    @registrants = @course_applications.collect{|a| a.acceptance_status == "Enroll" ? a : ''}.collect{|ca| ca.registrant.email }
+    
+    
+    @file_name = @course.title.gsub(/,/, '-').gsub(/'/, '-').gsub(' ', '-').gsub('/', '-')
+    
+    csv_string = FasterCSV.generate do |csv| 
+      # header row 
+      csv << "Email Address"
+
+      # data rows 
+      @registrants.each do |r|
+        csv << r
+      end 
+    end 
+
+    # send it to the browser
+    send_data csv_string, 
+            :type => 'text/html; charset=iso-8859-1; header=present', 
+            :disposition => "attachment; filename=#{@file_name}-emails.csv"
+  end 
   
   def filter
     @course = Course.find(params[:course_id])
@@ -883,54 +979,5 @@ class CoursesController < ApplicationController
   	end 
   	@course_applications.flatten!
   end
-  
-  def export_filtered_to_csv
-    @course = Course.find(params[:course_id])
-    unless User.current.admin? || @course.is_manager?
-      flash[:error] = "You are not authorized to view this section."
-  		redirect_to('/') and return
-  	end
-  	@course_applications = CourseApplication.find(:all, :conditions => ["id in (?)", params[:course_app_ids]])
-  	
-    @file_name = @course.title.gsub(/ /, '-').gsub(/,/, '-')
-    
-    @course_application_custom_fields = @course.all_course_app_custom_fields
-    @registrant_fields = Registrant.column_names - ["id", "created_at", "updated_at"]
-    @custom = []
-    unless @course_application_custom_fields.empty?
-  		@course_application_custom_fields.each do |custom_field|
-  		  @custom << custom_field.name
-  		end
-  	end
-  	@columns = @registrant_fields + @custom + ['review_status', 'acceptance_status']
-    
-    csv_string = FasterCSV.generate do |csv| 
-      # header row 
-      csv << @columns
-
-      # data rows 
-      @course_applications.each do |ja|
-        row = []
-        @registrant_fields.each do |af|
-          row << ja.registrant.send(af)
-        end
-        @custom.each do |c| 
-          ja.custom_values.each do |cv|
-            if cv.custom_field.name == c
-              row << show_value(cv)
-            end  
-          end
-        end
-        row << ja.review_status
-        row << ja.acceptance_status  
-        csv << row
-      end 
-    end 
-
-    # send it to the browser
-    send_data csv_string, 
-            :type => 'text/html; charset=iso-8859-1; header=present', 
-            :disposition => "attachment; filename=#{@file_name}-registrant-status.csv"
-  end  
   
 end

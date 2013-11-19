@@ -14,8 +14,10 @@
 		  <% @columns.each do |column| %>
 		    <th style="text-align:left;"><%= column %></th>
 		  <% end %>
-		  <%= sort_header_tag('Review Status') %>
-		  <%= sort_header_tag('Acceptance Status') %>
+		  <%= sort_header_tag('Submission Date') %>
+		  <%= sort_header_tag('Current Review Status') %>
+		  <%= sort_header_tag('Current Acceptance Status') %>
+		  <th style="text-align:left;">Assigned TF</th>
 	    </tr>	
 	  </thead>
 	  <tbody>
@@ -32,8 +34,10 @@
 			  <% end %>
 		    <% end %>
 		  <% end %>
+		  <td><%= ca.course.submission_date.month %>/<%= ca.course.submission_date.day %>/<%= ca.course.submission_date.year %> <%= ca.course.submission_date.strftime("%I:%M %p") %></td>
 		  <td><%=h ca.review_status %></td>
 		  <td><%=h ca.acceptance_status %></td>
+		  <td><%= ca.find_tf %></td>
 		</tr>
 		<% end %>
 	  </tbody>

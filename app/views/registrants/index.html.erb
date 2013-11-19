@@ -12,7 +12,7 @@
 <% if(User.current.admin?)%>
   <%= render :partial => 'mutual/tabs' %>
   <h3>Registrants</h3>
-  <%= render :partial => 'registrant_tables' %>
+  <%= render :partial => 'registrant_tables', :locals => {:course_tracker_id => @course_tracker.id} %>
   <br/>
   <h3>Teaching Fellows</h3>
   <%= render :partial => 'mutual/tf_tables' %>

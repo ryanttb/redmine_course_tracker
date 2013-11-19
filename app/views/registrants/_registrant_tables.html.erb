@@ -23,10 +23,10 @@
     <tr>
       <% if(User.current.admin?)%>
         <!-- Admin Role -->
-        <td><%= link_to "#{registrant.first_name}", registrant_url(registrant.id, :apptracker_id => params[:apptracker_id]) %></a></td>
-		<td><%= link_to "#{registrant.last_name}", registrant_url(registrant.id, :apptracker_id => params[:apptracker_id]) %></a></td>
-    	<td><%= link_to 'Edit', edit_registrant_url(registrant.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %></td>
-      	<td><%= link_to 'Delete', registrant_url(:id => registrant.id, :apptracker_id => params[:apptracker_id]), 
+        <td><%= link_to "#{registrant.first_name}", registrant_url(registrant.id, :course_tracker_id => params[:course_tracker_id]) %></a></td>
+		<td><%= link_to "#{registrant.last_name}", registrant_url(registrant.id, :course_tracker_id => params[:course_tracker_id]) %></a></td>
+    	<td><%= link_to 'Edit', edit_registrant_url(registrant.id, :course_tracker_id => params[:course_tracker_id]), :class => 'icon icon-edit' %></td>
+      	<td><%= link_to 'Delete', registrant_url(:id => registrant.id, :course_tracker_id => params[:course_tracker_id]), 
         :confirm => "Are you sure you want to delete #{registrant.first_name} #{registrant.last_name}\'s record?", 
         :method => :delete,
         :class => 'icon icon-del' %>

@@ -13,10 +13,6 @@
   <%= hidden_field_tag :course_id, @course.id %>
   <%= hidden_field_tag :course_tracker_id, @course_tracker.id %>
   <p>
-    <%= label_tag(:review_status, "Review Status") %><br />
-    <%= select_tag(:review_status, options_for_select(CourseApplication::REVIEW_STATUS)) %>
-  </p>
-  <p>
     <%= label_tag(:acceptance_status, "Acceptance Status") %><br />
     <%= select_tag(:acceptance_status, options_for_select(CourseApplication::ACCEPTANCE_STATUS)) %>
   </p>
@@ -56,7 +52,6 @@
 		    <th style="text-align:left;"><%= column %></th>
 		  <% end %>
 		  <th style="text-align:left;">TF</th>
-		  <th style="text-align:left;">Review Status</th>
 		  <th style="text-align:left;">Acceptance Status</th>
 	    </tr>	
 	  </thead>
@@ -81,7 +76,6 @@
 			<% end %>
 		  <% end %>
 		  <td><%= ja.find_tf %></td>
-		  <td><%= ja.review_status %></td>
 		  <td><%= ja.acceptance_status %></td>
 		</tr>
 		<% end %>

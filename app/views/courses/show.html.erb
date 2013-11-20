@@ -101,8 +101,6 @@ function toggle2() {
       <p>
 	  <%= label_tag 'course_materials', 'Select Applications from above to Bulk Change Status'%><br />
 	  <br />
-      <%= label_tag(:review_status, "Review Status") %><br />
-      <%= select_tag(:review_status, options_for_select(CourseApplication::REVIEW_STATUS)) %>
       <br />
       <%= label_tag(:acceptance_status, "Acceptance Status") %><br />
       <%= select_tag(:acceptance_status, options_for_select(CourseApplication::ACCEPTANCE_STATUS)) %>

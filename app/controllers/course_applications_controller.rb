@@ -14,7 +14,6 @@ class CourseApplicationsController < ApplicationController
     sort_init 'created_at', 'desc'
     sort_update 'last_name' => "#{Registrant.table_name}.last_name",
                 'id' => "#{CourseApplication.table_name}.id",
-                'review_status' => "#{CourseApplication.table_name}.review_status",
                 'acceptance_status' => "#{CourseApplication.table_name}.acceptance_status",
                 'user_id' => "#{CourseApplication.table_name}.user_id",
                 'created_at' => "#{CourseApplication.table_name}.created_at"
@@ -99,7 +98,7 @@ class CourseApplicationsController < ApplicationController
       flash[:error] = "The deadline has passed for this course."
       redirect_to('/') and return
     end
-    @course_application = CourseApplication.new(:course_id => @course.id, :registrant_id => @registrant.id, :review_status => "Not Reviewed")
+    @course_application = CourseApplication.new(:course_id => @course.id, :registrant_id => @registrant.id, :acceptance_status => "Not Reviewed")
     
     @course_tracker = CourseTracker.find(params[:course_application][:course_tracker_id])
     
@@ -280,8 +279,7 @@ class CourseApplicationsController < ApplicationController
   end
   
   def view_table
-    sort_init 'review_status', 'asc'
-    sort_update %w(review_status acceptance_status)                
+    sort_init 'acceptance_status', 'asc'               
                 
     @course = Course.find(params[:course_id])
     unless User.current.admin? || @course.is_manager?

@@ -39,7 +39,6 @@ class CoursesController < ApplicationController
     sort_init 'created_at', 'desc'
     sort_update 'last_name' => "#{Registrant.table_name}.last_name",
                 'id' => "#{CourseApplication.table_name}.id",
-                'review_status' => "#{CourseApplication.table_name}.review_status",
                 'acceptance_status' => "#{CourseApplication.table_name}.acceptance_status",
                 'created_at' => "#{CourseApplication.table_name}.created_at"
                 
@@ -76,7 +75,6 @@ class CoursesController < ApplicationController
     sort_init 'created_at', 'desc'
     sort_update 'last_name' => "#{Registrant.table_name}.last_name",
                 'id' => "#{CourseApplication.table_name}.id",
-                'review_status' => "#{CourseApplication.table_name}.review_status",
                 'acceptance_status' => "#{CourseApplication.table_name}.acceptance_status",
                 'created_at' => "#{CourseApplication.table_name}.created_at"
                 
@@ -372,9 +370,6 @@ class CoursesController < ApplicationController
           if !params[:user_id].blank?
             app.user_id = params[:user_id]
           end  
-          if !params[:review_status].blank?
-            app.review_status = params[:review_status]
-          end  
           if !params[:acceptance_status].blank?
             app.acceptance_status = params[:acceptance_status]
           end 
@@ -544,7 +539,7 @@ class CoursesController < ApplicationController
   		@course_application_custom_fields.collect{|custom_field| @custom << custom_field.name}
   	end
     
-    @application_fields = ["created_at", "review_status", "acceptance_status", "user_id"]
+    @application_fields = ["created_at", "acceptance_status", "user_id"]
   	
     @columns = @registrant_fields + @custom + @application_fields
     
@@ -604,7 +599,7 @@ class CoursesController < ApplicationController
   		end
   	end
     
-    @application_fields = ["created_at", "review_status", "acceptance_status", "user_id"]
+    @application_fields = ["created_at", "acceptance_status", "user_id"]
   	
     @columns = @registrant_fields + @custom + @application_fields
     
@@ -971,9 +966,6 @@ class CoursesController < ApplicationController
   	unless params[:user_id].blank?
   	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :user_id => params[:user_id]}, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
   	end
-  	unless params[:review_status].blank?
-  	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :review_status => params[:review_status]}, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
-  	end 
   	unless params[:acceptance_status].blank?
   	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :acceptance_status => params[:acceptance_status]}, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
   	end 

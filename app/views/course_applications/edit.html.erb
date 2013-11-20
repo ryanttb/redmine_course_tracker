@@ -32,10 +32,6 @@ document.observe("dom:loaded", function() {
   <% if(User.current.admin? || @course.is_manager?) %>
     <h3>Course Application Status</h3>
 	<p>
-      <%= f.label(:review_status, "Review Status") %><br />
-      <%= f.select(:review_status, CourseApplication::REVIEW_STATUS) %>
-    </p>
-	<p>
       <%= f.label(:acceptance_status, "Acceptance Status") %><br />
       <%= f.select(:acceptance_status, CourseApplication::ACCEPTANCE_STATUS) %>
     </p>

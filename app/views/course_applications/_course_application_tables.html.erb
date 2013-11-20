@@ -18,7 +18,6 @@
 		  <th style="width:5%; text-align:left;">Admin Notes</th>
 		  <th style="width:5%; text-align:left;"></th>
 		  <th style="width:5%; text-align:left;"></th>
-		  <th style="width:5%; text-align:left;"></th>
 		<% elsif @course_applications[0].course.is_manager?%>
 		  <!-- Manager Role -->
 		  <% if box %>
@@ -31,7 +30,6 @@
 		  <%= sort_header_tag('acceptance_status', :caption => 'Acceptance Status') %>
 		  <%= sort_header_tag('user_id', :caption => 'Assigned TF') %>
 		  <th style="width:5%; text-align:left;">Admin Notes</th>
-		  <th style="width:5%; text-align:left;"></th>
 		  <th style="width:5%; text-align:left;"></th>
 	    <% elsif (User.current.logged?)%>
 	      <!-- Registrant Role -->
@@ -67,8 +65,7 @@
 		  <td style="width:10%"><%= ca.acceptance_status %></td>
 		  <td style="width:10%"><%= ca.find_tf %></td>
  		  <td style="width:5%"><%= ca.notes.nil? || ca.notes.blank? ? 'No' : 'Yes' %></td>
-		  <td style="width:5%"><%= link_to 'View', course_application_url(ca.id, :course_tracker_id => ca.course_tracker_id), :class => 'icon icon-view' %></td>
-		  <td style="width:5%"><%= link_to 'Add Notes', edit_course_application_url(ca.id, :course_tracker_id => ca.course_tracker_id), :class => 'icon icon-edit' %></td>
+		  <td style="width:5%"><%= link_to 'Review', edit_course_application_url(ca.id, :course_tracker_id => ca.course_tracker_id), :class => 'icon icon-edit' %></td>
           <td style="width:5%"><%= link_to 'Delete', course_application_url(:id => ca.id), 
             :confirm => "Are you sure you want to delete #{ca.registrant.first_name} #{ca.registrant.last_name}\'s record?", 
             :method => :delete,
@@ -86,8 +83,7 @@
 			  <td style="width:10%"><%= ca.acceptance_status %></td>
 			  <td style="width:10%"><%= ca.find_tf %></td>
 	 		  <td style="width:5%"><%= ca.notes.nil? || ca.notes.blank? ? 'No' : 'Yes' %></td>
-			  <td style="width:5%"><%= link_to 'View', course_application_url(ca.id, :course_tracker_id => ca.course_tracker_id), :class => 'icon icon-view' %></td>
-			  <td style="width:5%"><%= link_to 'Add Notes', edit_course_application_url(ca.id, :course_tracker_id => ca.course_tracker_id), :class => 'icon icon-edit' %></td>
+			  <td style="width:5%"><%= link_to 'Review', edit_course_application_url(ca.id, :course_tracker_id => ca.course_tracker_id), :class => 'icon icon-edit' %></td>
         <% elsif (User.current.logged?)%>
           <!-- Registrant Role -->
 		  <td style="width:10%"><%= link_to "#{ca.course.title}", course_url(ca.course.id, :course_tracker_id => ca.course_tracker_id) %></td>

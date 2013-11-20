@@ -70,9 +70,13 @@
 	        <% end %>
 		    <% if @custom.include?(column) %>
 			  <% ja.custom_values.each do |cv| %>
-		        <% if cv.custom_field.name == column %>
-		          <td><%= show_value(cv) %></td>
-			    <% end %>
+  	            <% if cv.custom_field.name == column %>
+  			      <% if show_value(cv).blank? || show_value(cv).empty? %>
+  	                <td></td>
+  			      <% else %>
+  			        <td><%= show_value(cv) %></td>
+  			      <% end %>
+  		        <% end %>
 		      <% end %>
 			<% end %>
 		  <% end %>

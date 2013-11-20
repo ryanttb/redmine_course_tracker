@@ -29,9 +29,13 @@
 	      <% end %>
 		  <% @custom.each do |c| %>
 		    <% ca.custom_values.each do |cv| %>
-		      <% if cv.custom_field.name == c %>
-		        <td><%= show_value(cv) %></td>
-			  <% end %>
+	          <% if cv.custom_field.name == c %>
+			    <% if show_value(cv).blank? || show_value(cv).empty? %>
+	              <td></td>
+			    <% else %>
+			      <td><%= show_value(cv) %></td>
+			    <% end %>
+		      <% end %>
 		    <% end %>
 		  <% end %>
 		  <td><%= ca.course.submission_date.month %>/<%= ca.course.submission_date.day %>/<%= ca.course.submission_date.year %> <%= ca.course.submission_date.strftime("%I:%M %p") %></td>

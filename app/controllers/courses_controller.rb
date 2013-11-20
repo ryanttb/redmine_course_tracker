@@ -977,7 +977,7 @@ class CoursesController < ApplicationController
   	unless params[:acceptance_status].blank?
   	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :acceptance_status => params[:acceptance_status]}, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
   	end 
-  	@course_applications.flatten!
+  	@course_applications.flatten!.uniq!
   end
   
 end

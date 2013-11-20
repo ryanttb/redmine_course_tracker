@@ -52,6 +52,9 @@ class CoursesController < ApplicationController
       @course_applications = @course.course_applications.find(:all, :conditions => {:user_id => User.current.id}, :order => sort_clause, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)  
       @course_applications_all = @course.course_applications.find(:all, :order => sort_clause, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
     end
+    tf_apps_complete = Array.new
+    @course_applications.collect{|app| app.acceptance_status == "Admit" ? tf_apps_complete << app : '' }
+    @complete_apps = tf_apps_complete.length
     
     @course_attachments = @course.course_attachments.build
     course_attachments = @course.course_attachments.find :first, :include => [:attachments]

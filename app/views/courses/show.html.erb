@@ -81,6 +81,7 @@ function toggle2() {
   <% form_tag({:controller => 'courses', :action => 'zip_some'}, :id => 'registrant_form') do %>
   <!-- render Course Applications partial -->
   <h3>Submitted Applications - Total <%= @course_applications.length %></h3>
+  <p>Total Admitted: <%= @complete_apps %>
   <%= render :partial => "course_applications/course_application_tables", :locals => { :box => true } %>
   <p class="pagination"><%= pagination_links_full @course_pages, @course_count %></p>
   

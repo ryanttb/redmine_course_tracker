@@ -23,8 +23,6 @@ class RegistrantsController < ApplicationController
       tf_apps.collect{|app| app.acceptance_status == "Admit" ? tf_apps_complete << app : '' }
       @tfs_complete_hash[tf] = tf_apps_complete.length
     end
-    p "tf hash"
-    p @tfs_hash
   end
   
   def show 

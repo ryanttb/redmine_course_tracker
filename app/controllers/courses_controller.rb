@@ -88,6 +88,9 @@ class CoursesController < ApplicationController
     course_attachments = @course.course_attachments.find :first, :include => [:attachments]
     @course_attachment = course_attachments
     
+    #for large CSV exports
+    @course_app_slices = @course.course_applications.each_slice(1000).to_a.length
+    
     respond_to do |format|
       format.html #show.html.erb
     end
@@ -643,8 +646,8 @@ class CoursesController < ApplicationController
       flash[:error] = "You are not authorized to view this section."
   		redirect_to('/') and return
   	end
-    @course_applications = @course.course_applications
-    @registrants = @course_applications.collect{|a| a.acceptance_status == "Enroll" ? a : ''}.collect{|ca| ca.registrant.email }
+    @course_applications = CourseApplication.find(:all, :conditions => ["id in (?)", params[:course_app_ids]])
+    @registrants = @course_applications.collect{|ca| ca.registrant.email }
     
     
     @file_name = @course.title.gsub(/,/, '-').gsub(/'/, '-').gsub(' ', '-').gsub('/', '-')
@@ -969,7 +972,7 @@ class CoursesController < ApplicationController
   	unless params[:acceptance_status].blank?
   	  @course_applications << CourseApplication.find(:all, :conditions => {:course_id => params[:course_id], :acceptance_status => params[:acceptance_status]}, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
   	end 
-  	@course_applications.flatten!.uniq!
+  	@course_applications = @course_applications.flatten.uniq unless @course_applications.nil?
   end
   
 end

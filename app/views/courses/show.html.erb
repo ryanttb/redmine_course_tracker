@@ -75,14 +75,7 @@ function toggle2() {
 	  <p>
 	  <%= button_to "Filter Course Applications by Status/TF", filter_by_status_courses_path(:course_id => @course.id, :course_tracker_id => params[:course_tracker_id]) %>
 	  </p>
-	  
-    <h3>Enrollment Options</h3>
-      <p>
-	      <% form_tag({ :action =>  :export_emails_to_csv }, :html => { :multipart => true })do -%>
-	        <%= hidden_field_tag :course_id, @course.id %>
-	        <%= submit_tag "Export CSV of Enrolls' Emails" -%>
-	      <% end -%>
-  	  </p>	 	
+	   	
   <% end %>
   
   <% form_tag({:controller => 'courses', :action => 'zip_some'}, :id => 'registrant_form') do %>

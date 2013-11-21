@@ -7,8 +7,9 @@
 	    <% if(User.current.admin?)%>
 	      <!-- Admin Role -->
 		  <% if box %>
-		    <th style="width:10%; text-align:left;">Zip</th>
+		    <th style="width:5%; text-align:left;">Zip</th>
 		  <% end %>
+		  <th style="width:10%; text-align:left;">Application ID</th>
 		  <th style="width:10%; text-align:left;">Course</th>
 	      <%= sort_header_tag('last_name', :caption => 'Registrant') %>
 		  <%= sort_header_tag('created_at', :caption => 'Date Submitted') %>
@@ -21,8 +22,9 @@
 		<% elsif @course_applications[0].course.is_manager?%>
 		  <!-- Manager Role -->
 		  <% if box %>
-		    <th style="width:10%; text-align:left;">Zip</th>
+		    <th style="width:5%; text-align:left;">Zip</th>
 		  <% end %>
+		  <th style="width:10%; text-align:left;">Application ID</th>
 		  <th style="width:10%; text-align:left;">Course</th>
 	      <%= sort_header_tag('last_name', :caption => 'Registrant') %>
 		  <%= sort_header_tag('created_at', :caption => 'Date Submitted') %>
@@ -56,8 +58,9 @@
         <% if(User.current.admin?)%>
           <!-- Admin Role -->
           <% if box %>
-		    <td style="width:10%"><%= check_box_tag("registrants_to_zip[]", ca.id, false, :class => 'check') %></td>
+		    <td style="width:5%"><%= check_box_tag("registrants_to_zip[]", ca.id, false, :class => 'check') %></td>
 		  <% end %>
+		  <td style="width:10%"><%= ca.id %></td>
 		  <td style="width:10%"><%= link_to "#{ca.course.title}", course_url(ca.course.id, :course_tracker_id => ca.course_tracker_id) %></td>
           <td style="width:10%"><%= link_to "#{ca.registrant.first_name} #{ca.registrant.last_name}", registrant_url(ca.registrant.id, :course_tracker_id => ca.course_tracker_id) %></td>
           <td style="width:10%"><%= ca.created_at.month %>/<%= ca.created_at.day %>/<%= ca.created_at.year %> <%= ca.created_at.strftime("%I:%M %p") %></td>
@@ -74,8 +77,9 @@
 		<% elsif ca.course.is_manager? %>
 			<!-- Manager Role -->
 	          <% if box %>
-			    <td style="width:10%"><%= check_box_tag("registrants_to_zip[]", ca.id, false, :class => 'check') %></td>
+			    <td style="width:5%"><%= check_box_tag("registrants_to_zip[]", ca.id, false, :class => 'check') %></td>
 			  <% end %>
+			  <td style="width:10%"><%= ca.id %></td>
 			  <td style="width:10%"><%= link_to "#{ca.course.title}", course_url(ca.course.id, :course_tracker_id => ca.course_tracker_id) %></td>
 	          <td style="width:10%"><%= link_to "#{ca.registrant.first_name} #{ca.registrant.last_name}", registrant_url(ca.registrant.id, :course_tracker_id => ca.course_tracker_id) %></td>
 	          <td style="width:10%"><%= ca.created_at.month %>/<%= ca.created_at.day %>/<%= ca.created_at.year %> <%= ca.created_at.strftime("%I:%M %p") %></td>

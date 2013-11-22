@@ -75,7 +75,7 @@ class CourseApplicationsController < ApplicationController
     if @registrant.nil?
       redirect_to(new_registrant_url(:course_tracker_id => @course_tracker.id, :course_id => @course.id))
     else
-      @course_application = CourseApplication.new(:course_id => @course, :registrant_id => @registrant.id, :course_tracker_id => @course_tracker.id) 
+      @course_application = CourseApplication.new(:course_id => @course.id, :registrant_id => @registrant.id, :course_tracker_id => @course_tracker.id) 
     end  
   end
 

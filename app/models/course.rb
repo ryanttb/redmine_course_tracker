@@ -32,7 +32,7 @@ class Course < ActiveRecord::Base
   # TODO convert these values into variables that can be set from a settings page within Redmine
   # The first entry of the COURSE_STATUS array is reserved for allowing anonymous to see a course's details
   COURSE_STATUS = ["Active", "Inactive"]
-  COURSE_CATEGORIES = ["On Campus", "Online", "Campus/Online"]
+  COURSE_CATEGORIES = ["On Campus", "Online", "Campus/Online", "Enrollment"]
   COURSE_MATERIALS = ["Resume or CV", "Cover Letter", "Proposed Work", "Writing Sample"]
   
   def all_course_app_custom_fields

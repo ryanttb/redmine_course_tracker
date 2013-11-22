@@ -25,7 +25,7 @@ class CoursesController < ApplicationController
     if(User.current.admin? || User.current.member_of?(@course_tracker.project))
       @courses = @course_tracker.courses.find(:all, :order => sort_clause)
     else
-      @courses = @course_tracker.courses.find(:all, :conditions => ["status = ? and submission_date > ?", Course::COURSE_STATUS[0], DateTime.now], :order => sort_clause)
+      @courses = @course_tracker.courses.find(:all, :conditions => ["status = ? and submission_date > ? and category != ?", Course::COURSE_STATUS[0], DateTime.now, "Enrollment"], :order => sort_clause)
     end
   end
 
@@ -52,10 +52,11 @@ class CoursesController < ApplicationController
       @course_applications = @course.course_applications.find(:all, :conditions => {:user_id => User.current.id}, :order => sort_clause, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)  
       @course_applications_all = @course.course_applications.find(:all, :order => sort_clause, :limit => @course_pages.items_per_page, :offset => @course_pages.current.offset)
     end
-    tf_apps_complete = Array.new
-    @course_applications.collect{|app| app.acceptance_status == "Admit" ? tf_apps_complete << app : '' }
-    @complete_apps = tf_apps_complete.length
-    
+    if(User.current.admin? || User.current.member_of?(@course_tracker.project))
+      tf_apps_complete = Array.new
+      @course_applications.collect{|app| app.acceptance_status == "Admit" ? tf_apps_complete << app : '' }
+      @complete_apps = tf_apps_complete.length
+    end
     @course_attachments = @course.course_attachments.build
     course_attachments = @course.course_attachments.find :first, :include => [:attachments]
     @course_attachment = course_attachments

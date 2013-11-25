@@ -30,5 +30,10 @@ class Registrant < ActiveRecord::Base
   # constants
   # TODO convert these values into variables that can be set from a settings page within Redmine
   GENDER_OPTIONS = ['Male', 'Female', 'Other/Prefer not to answer']
+  
+  def age
+    now = Time.now.utc.to_date
+    now.year - self.dob.year - ((now.month > self.dob.month || (now.month == self.dob.month && now.day >= self.dob.day)) ? 0 : 1)
+  end
 
 end

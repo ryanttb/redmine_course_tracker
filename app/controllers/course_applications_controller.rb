@@ -65,12 +65,15 @@ class CourseApplicationsController < ApplicationController
 
   def new
     @course = Course.find params[:course_id] 
+    @registrant = Registrant.find_by_email(User.current.mail)
+    @course_tracker = CourseTracker.find(params[:course_tracker_id])
     if @course.submission_date < DateTime.now
       flash[:error] = "The deadline has passed for this course."
       redirect_to('/') and return
     end
-    @registrant = Registrant.find_by_email(User.current.mail)
-    @course_tracker = CourseTracker.find(params[:course_tracker_id])
+    if @registrant.age < 13
+      redirect_to(courses_url(:course_tracker_id => @course_tracker.id), :notice => "Thank you for your interest in this course.")
+    end
 
     if @registrant.nil?
       redirect_to(new_registrant_url(:course_tracker_id => @course_tracker.id, :course_id => @course.id))

@@ -82,15 +82,14 @@ class RegistrantsController < ApplicationController
     @user = User.current 
     
     now = Time.now.utc.to_date
-    age = now.year - params[:date][:year].to_i - ((now.month > params[:date][:month].to_i || (now.month == params[:date][:month].to_i && now.day >= params[:date][:day].to_i)) ? 0 : 1)
     @registrant.dob = Date.new(params[:date][:year].to_i, params[:date][:month].to_i, params[:date][:day].to_i)
-    
+
     # attempt to save, and flash the result to the user
     respond_to do |format|
       if(@registrant.save)
         debugger
         # no errors, redirect with success message
-        if age < 13
+        if @registrant.age < 13
           format.html { redirect_to(courses_url(:course_tracker_id => @course_tracker.id), :notice => "Thank you for your interest in this course.") }
         else  
           unless @course.nil?

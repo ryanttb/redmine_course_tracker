@@ -35,5 +35,16 @@ class Registrant < ActiveRecord::Base
     now = Time.now.utc.to_date
     now.year - self.dob.year - ((now.month > self.dob.month || (now.month == self.dob.month && now.day >= self.dob.day)) ? 0 : 1)
   end
+  
+  def find_application(course_tracker)
+    app = ""
+    CourseApplication.find(:all, :conditions => {:registrant_id => self.id, :course_tracker_id => course_tracker}).collect{|a| a.course.category != "Enrollment" ? app = a : ''}
+    return app 
+  end  
 
+  def find_enrollment(course_tracker)
+    form = ""
+    CourseApplication.find(:all, :conditions => {:registrant_id => self.id, :course_tracker_id => course_tracker}).collect{|a| a.course.category == "Enrollment" ? form = a : ''}
+    return form 
+  end  
 end

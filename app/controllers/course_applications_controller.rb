@@ -71,14 +71,15 @@ class CourseApplicationsController < ApplicationController
       flash[:error] = "The deadline has passed for this course."
       redirect_to('/') and return
     end
-    if @registrant.age < 13
-      redirect_to(courses_url(:course_tracker_id => @course_tracker.id), :notice => "Thank you for your interest in this course.")
-    end
 
     if @registrant.nil?
       redirect_to(new_registrant_url(:course_tracker_id => @course_tracker.id, :course_id => @course.id))
     else
-      @course_application = CourseApplication.new(:course_id => @course.id, :registrant_id => @registrant.id, :course_tracker_id => @course_tracker.id) 
+      if @registrant.age < 13
+        redirect_to(courses_url(:course_tracker_id => @course_tracker.id), :notice => "Thank you for your interest in this course.")
+      else
+        @course_application = CourseApplication.new(:course_id => @course.id, :registrant_id => @registrant.id, :course_tracker_id => @course_tracker.id) 
+      end  
     end  
   end
 

@@ -53,8 +53,7 @@ class CourseApplicationsController < ApplicationController
   	  flash[:error] = "You are not authorized to view this section."
   		redirect_to('/') and return
   	end
-    p "grade why"
-    p @course_application.grade_why
+    
     # note these two lines are NOT the same, one is course materials the other is course referrals
     #@course_application_materials = @course_application.course_application_materials.find :all, :include => [:attachments]
     #@course_application_referrals = @course_application.course_application_referrals.find :all, :include => [:attachments]

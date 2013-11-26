@@ -38,7 +38,7 @@ class Registrant < ActiveRecord::Base
   
   def find_application(course_tracker)
     app = ""
-    CourseApplication.find(:all, :conditions => {:registrant_id => self.id, :course_tracker_id => course_tracker}).collect{|a| a.course.category != "Enrollment" ? app = a : ''}
+    CourseApplication.find(:all, :conditions => {:registrant_id => self.id, :course_tracker_id => course_tracker}).collect{|a| a.course.category == "Application" ? app = a : ''}
     return app 
   end  
 

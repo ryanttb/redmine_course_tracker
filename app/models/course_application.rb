@@ -55,4 +55,22 @@ class CourseApplication < ActiveRecord::Base
     self.user_id = tfs_hash.select {|k,v| v == tfs_hash.values.min}.first[0].id
   end  
   
+  def grade_why
+    # Why do you want to take CopyrightX? (Please provide no fewer than 300 and no more than 500 words)
+    self.custom_values.each do |custom_value|
+      if custom_value.custom_field.name.include?("Why do you want to take CopyrightX?")
+        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+          return true
+        else
+          return false
+        end    
+  	  end
+    end
+    
+  end  
+  
+  def grade_read_comp
+    
+  end  
+  
 end

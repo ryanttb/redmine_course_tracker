@@ -66,11 +66,28 @@ class CourseApplication < ActiveRecord::Base
         end    
   	  end
     end
-    
   end  
   
   def grade_read_comp
+    #1. We allowed the woman to stay with us for three weeks, but after the hurricane hit she _________ refused to help us repair our house.
+    #2. The farmer expected the sun to nourish his crop with its unseasonably strong rays, but instead it _________ the crop before the fruit had a chance to mature.
+    #3. In addition to being over 2,000 miles long, the trail was also one of the most _________ and tiring on the continent.
+    #4. The artist’s paintings are _________ today, though they were _________ during her lifetime.
+    #5. The teacher wanted to inspire his students to study science, so he invited the _________ _________ to his class.
+    #6. Learning to wrap packages was the first thing the girl did when she _________ to work in her aunt’s store.
+    #7. Wherever you go, _________ to remind you of the musician.
+    #8. If we examine the forest with _________ the island is covered, we find it is full of life.
+    #9. Identify the word that must be changed in order for the following sentence to be correct: Because the days was cold and stormy, the fishermen stayed in port.
     
+    self.custom_values.each do |custom_value|
+      if custom_value.custom_field.name.include?("Why do you want to take CopyrightX?")
+        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+          return true
+        else
+          return false
+        end    
+  	  end
+    end
   end  
   
 end

@@ -122,7 +122,7 @@ class CourseApplicationsController < ApplicationController
       error_files = materials  
     end
     
-    if @course_application.grade_why #&& @course_application.grade_read_comp
+    if @course_application.grade_why && @course_application.grade_read_comp
       #Automatically assign the TF
       @course_application.assign_tf
       @course_application.acceptance_status = "Not Reviewed"
@@ -196,7 +196,7 @@ class CourseApplicationsController < ApplicationController
     @course_tracker = CourseTracker.find(params[:course_application][:course_tracker_id])
     @course_application_materials = @course_application.course_application_materials.find :all, :include => [:attachments]
     
-    unless @course_application.grade_why #&& @course_application.grade_read_comp
+    if !@course_application.grade_why || !@course_application.grade_read_comp
       @course_application.acceptance_status = "Auto-Reject"
     end 
         

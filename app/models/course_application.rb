@@ -87,7 +87,7 @@ class CourseApplication < ActiveRecord::Base
     
     self.custom_values.each do |custom_value|
       if custom_value.custom_field.name.include?("1. We allowed the woman")
-        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+        if custom_value.value == "e. heartlessly"
           count_right = count_right + 1
         else
           count_wrong = count_wrong + 1
@@ -95,7 +95,7 @@ class CourseApplication < ActiveRecord::Base
   	  end
       
       if custom_value.custom_field.name.include?("2. The farmer expected the sun")
-        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+        if custom_value.value == "b. withered"
           count_right = count_right + 1
         else
           count_wrong = count_wrong + 1
@@ -103,7 +103,7 @@ class CourseApplication < ActiveRecord::Base
   	  end
       
       if custom_value.custom_field.name.include?("3. In addition to being over 2,000")
-        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+        if custom_value.value == "d. treacherous"
           count_right = count_right + 1
         else
           count_wrong = count_wrong + 1
@@ -111,7 +111,7 @@ class CourseApplication < ActiveRecord::Base
   	  end
       
       if custom_value.custom_field.name.include?("4. The artist’s paintings are")
-        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+        if custom_value.value == "b. admired, overlooked"
           count_right = count_right + 1
         else
           count_wrong = count_wrong + 1
@@ -119,7 +119,7 @@ class CourseApplication < ActiveRecord::Base
   	  end
       
       if custom_value.custom_field.name.include?("5. The teacher wanted to inspire")
-        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+        if custom_value.value == "d. eloquent chemist"
           count_right = count_right + 1
         else
           count_wrong = count_wrong + 1
@@ -127,7 +127,7 @@ class CourseApplication < ActiveRecord::Base
   	  end
       
       if custom_value.custom_field.name.include?("6. Learning to wrap packages was")
-        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+        if custom_value.value == "a. went"
           count_right = count_right + 1
         else
           count_wrong = count_wrong + 1
@@ -135,7 +135,7 @@ class CourseApplication < ActiveRecord::Base
   	  end
       
       if custom_value.custom_field.name.include?("7. Wherever you go,")
-        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+        if custom_value.value == "c. you will find something"
           count_right = count_right + 1
         else
           count_wrong = count_wrong + 1
@@ -143,7 +143,7 @@ class CourseApplication < ActiveRecord::Base
   	  end
       
       if custom_value.custom_field.name.include?("8. If we examine the forest with")
-        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+        if custom_value.value == "d. which"
           count_right = count_right + 1
         else
           count_wrong = count_wrong + 1
@@ -151,7 +151,7 @@ class CourseApplication < ActiveRecord::Base
   	  end
       
       if custom_value.custom_field.name.include?("9. Identify the word that must be changed")
-        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+        if custom_value.value == "a. days"
           count_right = count_right + 1
         else
           count_wrong = count_wrong + 1

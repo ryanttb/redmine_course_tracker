@@ -57,15 +57,18 @@ class CourseApplication < ActiveRecord::Base
   
   def grade_why
     # Why do you want to take CopyrightX? (Please provide no fewer than 300 and no more than 500 words)
+    grade = false
     self.custom_values.each do |custom_value|
+      p custom_value.custom_field.name
       if custom_value.custom_field.name.include?("Why do you want to take CopyrightX?")
         if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
-          return true
+          grade = true
         else
-          return false
+          grade = false
         end    
   	  end
     end
+    return grade
   end  
   
   def grade_read_comp

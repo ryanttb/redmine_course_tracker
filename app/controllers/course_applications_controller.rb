@@ -102,7 +102,7 @@ class CourseApplicationsController < ApplicationController
       flash[:error] = "The deadline has passed for this course."
       redirect_to('/') and return
     end   
-    @course_application = CourseApplication.new(:course_id => @course.id, :registrant_id => @registrant.id)
+    @course_application = CourseApplication.new(params[:course_application])
     @course_tracker = CourseTracker.find(params[:course_application][:course_tracker_id])
     
     #prepare the course application material attachments
@@ -122,7 +122,7 @@ class CourseApplicationsController < ApplicationController
       error_files = materials  
     end
     
-    if @course_application.grade_why && @course_application.grade_read_comp
+    if @course_application.grade_why #&& @course_application.grade_read_comp
       #Automatically assign the TF
       @course_application.assign_tf
       @course_application.acceptance_status = "Not Reviewed"
@@ -133,7 +133,6 @@ class CourseApplicationsController < ApplicationController
     respond_to do |format|
       if error_files.empty?
         flash.now[:error] = nil
-        @course_application.update_attributes(params[:course_application])
         if(@course_application.save)
           #if course application requires material then create course application material
           unless @course.application_material_types.nil? || @course.application_material_types.empty?
@@ -196,6 +195,10 @@ class CourseApplicationsController < ApplicationController
     @course = Course.find @course_application.course_id
     @course_tracker = CourseTracker.find(params[:course_application][:course_tracker_id])
     @course_application_materials = @course_application.course_application_materials.find :all, :include => [:attachments]
+    
+    unless @course_application.grade_why #&& @course_application.grade_read_comp
+      @course_application.acceptance_status = "Auto-Reject"
+    end 
         
     # update the course_application's attributes, and indicate a message to the user opon success/failure
     respond_to do |format|

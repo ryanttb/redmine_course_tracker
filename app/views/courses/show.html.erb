@@ -144,12 +144,19 @@ function toggle2() {
 		<% if x.course_id == @course.id %>
 			<% @this_course = x %>
 		<% end %>	
+		<% if x.course.category == "Application" && x.course.course_tracker == @course.course_tracker && x.status == "Admit" %>
+			<% @application = x %>
+		<% end %>	
 	<% end %>
   <% end %>
   	<!-- if the applicant has already applied to this course, do not show the "Apply" link -->
 	<% if @this_course.nil? %>
 	  <% if @course.category == "Enrollment" %>
-	    <%= link_to "Complete Enrollment Form", new_course_application_url(:course_tracker_id => params[:course_tracker_id], :course_id => @course.id, :user_id => User.current.id) %>
+	    <% unless @application.nil? %>
+	      <%= link_to "Complete Enrollment Form", new_course_application_url(:course_tracker_id => params[:course_tracker_id], :course_id => @course.id, :user_id => User.current.id) %>
+		<% else %>
+		  You are not authorized to complete this form.  
+		<% end %>  
 	  <% else %>
 		<%= link_to "Apply to this course", new_course_application_url(:course_tracker_id => params[:course_tracker_id], :course_id => @course.id, :user_id => User.current.id) %>
       <% end %>

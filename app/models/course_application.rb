@@ -79,15 +79,88 @@ class CourseApplication < ActiveRecord::Base
     #8. If we examine the forest with _________ the island is covered, we find it is full of life.
     #9. Identify the word that must be changed in order for the following sentence to be correct: Because the days was cold and stormy, the fishermen stayed in port.
     
+    count_wrong = 0
+    count_right = 0
+    
     self.custom_values.each do |custom_value|
-      if custom_value.custom_field.name.include?("Why do you want to take CopyrightX?")
+      if custom_value.custom_field.name.include?("1. We allowed the woman")
         if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
-          return true
+          count_right = count_right + 1
         else
-          return false
+          count_wrong = count_wrong + 1
+        end    
+  	  end
+      
+      if custom_value.custom_field.name.include?("2. The farmer expected the sun")
+        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+          count_right = count_right + 1
+        else
+          count_wrong = count_wrong + 1
+        end    
+  	  end
+      
+      if custom_value.custom_field.name.include?("3. In addition to being over 2,000")
+        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+          count_right = count_right + 1
+        else
+          count_wrong = count_wrong + 1
+        end    
+  	  end
+      
+      if custom_value.custom_field.name.include?("4. The artist’s paintings are")
+        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+          count_right = count_right + 1
+        else
+          count_wrong = count_wrong + 1
+        end    
+  	  end
+      
+      if custom_value.custom_field.name.include?("5. The teacher wanted to inspire")
+        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+          count_right = count_right + 1
+        else
+          count_wrong = count_wrong + 1
+        end    
+  	  end
+      
+      if custom_value.custom_field.name.include?("6. Learning to wrap packages was")
+        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+          count_right = count_right + 1
+        else
+          count_wrong = count_wrong + 1
+        end    
+  	  end
+      
+      if custom_value.custom_field.name.include?("7. Wherever you go,")
+        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+          count_right = count_right + 1
+        else
+          count_wrong = count_wrong + 1
+        end    
+  	  end
+      
+      if custom_value.custom_field.name.include?("8. If we examine the forest with")
+        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+          count_right = count_right + 1
+        else
+          count_wrong = count_wrong + 1
+        end    
+  	  end
+      
+      if custom_value.custom_field.name.include?("9. Identify the word that must be changed")
+        if custom_value.value.split.size > 300 && custom_value.value.split.size < 500
+          count_right = count_right + 1
+        else
+          count_wrong = count_wrong + 1
         end    
   	  end
     end
+    
+    if count_wrong > 2
+      return false
+    else 
+      return true
+    end    
   end  
   
 end

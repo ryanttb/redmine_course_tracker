@@ -102,7 +102,7 @@ class CourseApplicationsController < ApplicationController
       flash[:error] = "The deadline has passed for this course."
       redirect_to('/') and return
     end   
-    
+    @course_application = CourseApplication.new(:course_id => @course.id, :registrant_id => @registrant.id)
     @course_tracker = CourseTracker.find(params[:course_application][:course_tracker_id])
     
     #prepare the course application material attachments
@@ -125,9 +125,9 @@ class CourseApplicationsController < ApplicationController
     if @course_application.grade_why && @course_application.grade_read_comp
       #Automatically assign the TF
       @course_application.assign_tf
-      @course_application = CourseApplication.new(:course_id => @course.id, :registrant_id => @registrant.id, :acceptance_status => "Not Reviewed")
+      @course_application.acceptance_status = "Not Reviewed"
     else
-      @course_application = CourseApplication.new(:course_id => @course.id, :registrant_id => @registrant.id, :acceptance_status => "Auto-Reject")
+      @course_application.acceptance_status = "Auto-Reject"
     end 
     
     respond_to do |format|

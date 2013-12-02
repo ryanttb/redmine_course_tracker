@@ -40,6 +40,7 @@
 		  <th style="width:5%; text-align:left;"></th>
 		  <th style="width:5%; text-align:left;"></th>
 		  <th style="width:5%; text-align:left;"></th>
+		  <th style="width:5%; text-align:left;"></th>
 	    <% else %>
 	      <!-- Anonymous Role -->
 	      <!-- No view for Anonymous -->
@@ -93,6 +94,7 @@
 		  <td style="width:10%"><%= link_to "#{ca.course.title}", course_url(ca.course.id, :course_tracker_id => ca.course_tracker_id) %></td>
 		  <td style="width:10%"><%= ca.course.display_deadline %></td>
 		  <% if ca.course.submission_date > DateTime.now %>
+		    <td style="width:5%"><%= link_to 'Edit Application', edit_course_application_url(ca.id, :course_tracker_id => ca.course_tracker_id), :class => 'icon icon-edit' %></td>
 		    <td style="width:5%"><%= link_to 'View Application', course_application_url(ca.id, :course_tracker_id => ca.course_tracker_id), :class => 'icon icon-view' %></td>
             <td style="width:5%"><%= link_to 'Delete', course_application_url(:id => ca.id), 
               :confirm => "Are you sure you want to delete #{ca.registrant.first_name} #{ca.registrant.last_name}\'s record?", 
